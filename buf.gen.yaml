@@ -1,0 +1,23 @@
+version: v1beta1
+
+plugins:
+  - name: go
+    out: pkg/gen
+    opt: paths=source_relative
+
+  - name: go-grpc
+    out: pkg/gen
+    opt: paths=source_relative,require_unimplemented_servers=false
+
+  - name: grpc-gateway
+    out: pkg/gen
+    opt: paths=source_relative,logtostderr=true
+
+  - name: validate
+    out: pkg/gen
+    opt: paths=source_relative,lang=go
+
+  - name: openapiv2
+    out: api
+    opt: allow_merge=true,merge_file_name=smk,disable_default_errors=true,logtostderr=true
+    strategy: all
