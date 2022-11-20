@@ -1,4 +1,4 @@
-module github.com/paramonies/ya-gophermart
+module github.com/paramonies/ya-gophkeeper
 
 go 1.19
 
