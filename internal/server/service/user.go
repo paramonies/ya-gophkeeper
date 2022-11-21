@@ -30,15 +30,15 @@ func NewUserHandler(s store.Connector, l *logger.Logger) *UserHandler {
 // RegisterUser handler creates new user
 func (h *UserHandler) RegisterUser(ctx context.Context, req *pb.RegisterUserRequest) (*pb.RegisterUserResponse, error) {
 	h.log.Info("RegisterUser handler")
-	if req.ServiceLogin == "" || req.ServicePass == "" {
+	if req.GetLogin() == "" || req.GetPassword() == "" {
 		return nil, status.Error(codes.InvalidArgument, "login and password must be specified")
 	}
 
-	h.log.Debug("input args", "login: ", req.GetServiceLogin(), "password: ", req.GetServicePass())
+	h.log.Debug("input args", "login: ", req.GetLogin(), "password: ", req.GetPassword())
 
 	resp, err := h.storage.Users().Register(ctx, &dto.RegisterRequest{
-		Login:        req.GetServiceLogin(),
-		PasswordHash: util.EncryptPass(req.GetServicePass()),
+		Login:        req.GetLogin(),
+		PasswordHash: util.EncryptPass(req.GetPassword()),
 	})
 	if err != nil {
 		h.log.Error("error creating the user", err)

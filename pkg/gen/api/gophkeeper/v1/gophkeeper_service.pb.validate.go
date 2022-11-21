@@ -57,9 +57,9 @@ func (m *RegisterUserRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for ServiceLogin
+	// no validation rules for Login
 
-	// no validation rules for ServicePass
+	// no validation rules for Password
 
 	if len(errors) > 0 {
 		return RegisterUserRequestMultiError(errors)

@@ -21,8 +21,8 @@ var (
 
 func init() {
 	rootCmd.AddCommand(registerUserCmd)
-	registerUserCmd.Flags().StringVarP(&registerUser.ServiceLogin, "login", "l", "", "New user login value.")
-	registerUserCmd.Flags().StringVarP(&registerUser.ServicePass, "password", "p", "", "New user password value.")
+	registerUserCmd.Flags().StringVarP(&registerUser.Login, "login", "l", "", "New user login value.")
+	registerUserCmd.Flags().StringVarP(&registerUser.Password, "password", "p", "", "New user password value.")
 	registerUserCmd.MarkFlagRequired("login")
 	registerUserCmd.MarkFlagRequired("password")
 
@@ -62,7 +62,7 @@ Usage: gophkeeperclient registerUser --login=<login> --password=<password>.`,
 		storage.Users[u.Username] = response.GetJwt()
 		// init for the new user local storage
 		storage.Objects[u.Username] = storage.CreateStorage()
-		log.Info(fmt.Sprintf("user %s registered!", registerUser.GetServiceLogin()), "userID", response.GetUserID())
+		log.Info(fmt.Sprintf("user %s registered!", registerUser.GetLogin()), "userID", response.GetUserID())
 	},
 }
 
