@@ -4,6 +4,11 @@
     "title": "api/gophkeeper/v1/gophkeeper_service.proto",
     "version": "version not set"
   },
+  "tags": [
+    {
+      "name": "GophkeeperService"
+    }
+  ],
   "consumes": [
     "application/json"
   ],
@@ -11,5 +16,28 @@
     "application/json"
   ],
   "paths": {},
-  "definitions": {}
+  "definitions": {
+    "protoLoginUserResponse": {
+      "type": "object",
+      "properties": {
+        "userID": {
+          "type": "string"
+        },
+        "jwt": {
+          "type": "string"
+        }
+      }
+    },
+    "protoRegisterUserResponse": {
+      "type": "object",
+      "properties": {
+        "userID": {
+          "type": "string"
+        },
+        "jwt": {
+          "type": "string"
+        }
+      }
+    }
+  }
 }

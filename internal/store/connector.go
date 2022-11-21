@@ -2,11 +2,18 @@ package store
 
 import (
 	"context"
+
 	"github.com/paramonies/ya-gophkeeper/internal/store/dto"
 )
 
 type Connector interface {
-	Passwords() PasswordRepo
+	Users() UserRepo
+	//Passwords() PasswordRepo
+}
+
+type UserRepo interface {
+	Register(ctx context.Context, req *dto.RegisterRequest) (*dto.RegisterResponse, error)
+	Login(ctx context.Context, req *dto.LoginRequest) (*dto.LoginResponse, error)
 }
 
 type PasswordRepo interface {

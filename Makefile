@@ -34,3 +34,15 @@ proto-test:
 	--go-grpc_out=. \
 	--go-grpc_opt=paths=source_relative \
 	./api/gophkeeper/v1/gophkeeper_service.proto
+
+.PHONY: fmt
+fmt:
+	goimports -local "github.com/paramonies/ya-gophkeeper" -w cmd internal pkg/logger
+
+.PHONY: server-run
+server-run:
+	go run cmd/server/main.go
+
+.PHONY: client-register
+client-register:
+	go run cmd/client/main.go registerUser --login=test4 --password=123456

@@ -1,8 +1,9 @@
 package pgx
 
 import (
-	"github.com/jackc/pgx/v4/pgxpool"
 	"time"
+
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type PasswordRepo struct {
