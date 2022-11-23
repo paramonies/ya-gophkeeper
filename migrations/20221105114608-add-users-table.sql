@@ -8,7 +8,7 @@ create table if not exists users
     deleted_at      timestamp,
 
     constraint users_pk primary key (id),
-    constraint login unique (login)
+    constraint users_login unique (login)
 );
 -- +migrate Down
 drop table users;

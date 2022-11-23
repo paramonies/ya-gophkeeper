@@ -8,7 +8,7 @@ import (
 
 type Connector interface {
 	Users() UserRepo
-	//Passwords() PasswordRepo
+	Passwords() PasswordRepo
 }
 
 type UserRepo interface {
@@ -17,8 +17,9 @@ type UserRepo interface {
 }
 
 type PasswordRepo interface {
-	Create(ctx context.Context, req *dto.CreatePasswordRequest) (*dto.CreatePasswordResponse, error)
-	Get(ctx context.Context, req *dto.GetPasswordRequest) (*dto.GetPasswordResponse, error)
-	Update(ctx context.Context, req *dto.UpdatePasswordRequest) (*dto.UpdatePasswordResponse, error)
-	Delete(ctx context.Context, req *dto.DeletePasswordRequest) (*dto.DeletePasswordResponse, error)
+	Create(ctx context.Context, req *dto.CreateRequest) (*dto.CreateResponse, error)
+	GetByID(ctx context.Context, req *dto.GetByIDRequest) (*dto.GetByIDResponse, error)
+	//Get(ctx context.Context, req *dto.GetPasswordRequest) (*dto.GetPasswordResponse, error)
+	//Update(ctx context.Context, req *dto.UpdatePasswordRequest) (*dto.UpdatePasswordResponse, error)
+	//Delete(ctx context.Context, req *dto.DeletePasswordRequest) (*dto.DeletePasswordResponse, error)
 }

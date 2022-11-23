@@ -6,7 +6,7 @@ option go_package = "github.com/paramonies/ya-gophkeeper/pkg/gen/gophkeeper/v1;g
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
-service GophkeeperService {
+service UserService {
   rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
   rpc LoginUser(LoginUserRequest) returns (LoginUserResponse);
 }

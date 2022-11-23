@@ -3,9 +3,10 @@ create table if not exists passwords
 (
     id              uuid default gen_random_uuid(),
     user_id         uuid not null,
+    login           text not null,
     password        text not null,
-    data_version    integer not null default 0,
     meta            text,
+    version         integer not null default 0,
     created_at      timestamp default now(),
     deleted_at      timestamp,
 

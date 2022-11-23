@@ -61,6 +61,23 @@ func (e *UserNotFoundError) Unwrap() error {
 	return &e.ResourceNotFoundError
 }
 
+type PasswordNotFoundError struct {
+	ResourceNotFoundError
+}
+
+func NewPasswordNotFoundError(login string) error {
+	return &UserNotFoundError{
+		ResourceNotFoundError{
+			Kind: "password",
+			ID:   login,
+		},
+	}
+}
+
+func (e *PasswordNotFoundError) Unwrap() error {
+	return &e.ResourceNotFoundError
+}
+
 // IsNotFound returns true if the err's chain contains ResourceNotFound error.
 // Otherwise, it returns false.
 func IsNotFound(err error) bool {

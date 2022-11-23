@@ -53,7 +53,7 @@ Usage: gophkeeperclient registerUser --login=<login> --password=<password>.`,
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 		defer cancel()
 
-		response, err := cli.RegisterUser(ctx, &registerUser)
+		response, err := cliUser.RegisterUser(ctx, &registerUser)
 		if err != nil {
 			log.Error("failed to register user", err)
 			return
@@ -84,17 +84,23 @@ Usage: gophkeeperclient loginUser --login=<login> --password=<password>.`,
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 		defer cancel()
 
-		response, err := cli.LoginUser(ctx, &loginUser)
+		response, err := cliUser.LoginUser(ctx, &loginUser)
 		if err != nil {
 			log.Error("failed to login user", err)
 			return
 		}
 
 		storage.Users[u.Username] = response.GetJwt()
-		localObjectsd, ok := storage.Objects[u.Username]
+		localObjects, ok := storage.Objects[u.Username]
 		if !ok {
-			localObjectsd = storage.CreateStorage()
-			storage.Objects[u.Username] = localObjectsd
+			localObjects = storage.CreateStorage()
+			storage.Objects[u.Username] = localObjects
+		}
+
+		err = storage.UpdateFiles(cfg.UsersStoragePath, cfg.ObjectsStoragePath)
+		if err != nil {
+			log.Error("failed to update local storage files", err)
+			return
 		}
 
 		// after successful login - get JWT and send to server to synchronize data.

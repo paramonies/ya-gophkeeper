@@ -43,12 +43,12 @@ func JWTEncode(key string, value interface{}) (string, error) {
 }
 
 // JWTDecodeUserID provides userID from JWT, if decoding is successful.
-func JWTDecodeUserID(token string) (int, error) {
+func JWTDecodeUserID(token string) (string, error) {
 	value, err := JWTDecode(token, "sub")
 	if err != nil {
-		return -1, err
+		return "", err
 	}
-	return int(value.(float64)), nil
+	return value.(string), nil
 }
 
 // JWTDecode decodes the passed JWT and returns the interface value.
@@ -76,16 +76,16 @@ var (
 )
 
 // GetUserIDFromCTX returns from context userID if found.
-func GetUserIDFromCTX(ctx context.Context) int {
-	value, ok := ctx.Value(userID).(int)
+func GetUserIDFromCTX(ctx context.Context) *string {
+	value, ok := ctx.Value(userID).(string)
 	if !ok {
-		return -1
+		return nil
 	}
-	return value
+	return &value
 }
 
 // SetUserIDToCTX add userID to the context.
-func SetUserIDToCTX(ctx context.Context, value int) context.Context {
+func SetUserIDToCTX(ctx context.Context, value string) context.Context {
 	return context.WithValue(ctx, userID, value)
 }
 

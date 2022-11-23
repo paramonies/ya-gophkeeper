@@ -7,6 +7,10 @@ type User struct {
 }
 
 type Password struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
+	Meta     string `json:"meta"`
+	Version  uint32 `json:"version"`
 }
 
 type Text struct {

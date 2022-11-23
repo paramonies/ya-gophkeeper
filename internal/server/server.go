@@ -15,15 +15,19 @@ import (
 type GRPCServer struct {
 	serv *grpc.Server
 	log  *logger.Logger
-	pb.UnimplementedGophkeeperServiceServer
+	pb.UnimplementedUserServiceServer
+	pb.UnimplementedPasswordServiceServer
 }
 
 func InitGRPCServer(con store.Connector, l *logger.Logger) (*GRPCServer, error) {
 	grpcServer := grpc.NewServer(
 		grpc.UnaryInterceptor(interceptor.AuthCheckGRPC))
 
-	clusterHandler := service.NewUserHandler(con, l)
-	pb.RegisterGophkeeperServiceServer(grpcServer, clusterHandler)
+	userHandler := service.NewUserHandler(con, l)
+	pb.RegisterUserServiceServer(grpcServer, userHandler)
+
+	passwordHandler := service.NewPasswordHandler(con, l)
+	pb.RegisterPasswordServiceServer(grpcServer, passwordHandler)
 
 	return &GRPCServer{serv: grpcServer, log: l}, nil
 }

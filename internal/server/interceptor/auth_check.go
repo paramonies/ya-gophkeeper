@@ -14,8 +14,8 @@ import (
 
 var (
 	SkipCheckMethods = map[string]struct{}{
-		"/proto.GophkeeperService/RegisterUser": {},
-		"/proto.GophkeeperService/LoginUser":    {},
+		"/proto.UserService/RegisterUser": {},
+		"/proto.UserService/LoginUser":    {},
 	}
 )
 

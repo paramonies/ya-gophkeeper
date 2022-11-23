@@ -1,9 +1,29 @@
 package dto
 
-type CreatePasswordRequest struct {
+type CreateRequest struct {
+	UserID   string
+	Login    string
+	Password string
+	Meta     string
+	Version  uint32
 }
 
-type CreatePasswordResponse struct {
+type CreateResponse struct {
+	PasswordID string
+}
+
+type GetByIDRequest struct {
+	Login  string
+	UserID string
+}
+
+type GetByIDResponse struct {
+	ID       string
+	UserID   string
+	Login    string
+	Password string
+	Meta     string
+	Version  uint32
 }
 
 type GetPasswordRequest struct {

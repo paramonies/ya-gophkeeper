@@ -9,14 +9,14 @@ import (
 )
 
 type pgxConnector struct {
-	userRepo *pgx.UserRepo
-	//passwordRepo *pgx.PasswordRepo
+	userRepo     *pgx.UserRepo
+	passwordRepo *pgx.PasswordRepo
 }
 
 func NewPgxConnector(p *pgxpool.Pool, queryTimeout time.Duration) Connector {
 	return &pgxConnector{
-		userRepo: pgx.NewUserRepo(p, queryTimeout),
-		//passwordRepo: pgx.NewPasswordRepo(p, queryTimeout),
+		userRepo:     pgx.NewUserRepo(p, queryTimeout),
+		passwordRepo: pgx.NewPasswordRepo(p, queryTimeout),
 	}
 }
 
@@ -24,6 +24,6 @@ func (c *pgxConnector) Users() UserRepo {
 	return c.userRepo
 }
 
-//func (c *pgxConnector) Passwords() PasswordRepo {
-//	return c.passwordRepo
-//}
+func (c *pgxConnector) Passwords() PasswordRepo {
+	return c.passwordRepo
+}

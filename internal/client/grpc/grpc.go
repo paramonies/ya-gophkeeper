@@ -10,14 +10,24 @@ import (
 var clientConn *grpc.ClientConn
 
 // DialUp initiates a connection between the client and the server. Address taken from cfg.GrpcServerPath.
-func DialUp(serverPath string) (pb.GophkeeperServiceClient, error) {
+func DialUpUser(serverPath string) (pb.UserServiceClient, error) {
 	conn, err := grpc.Dial(serverPath, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
 
 	clientConn = conn
-	return pb.NewGophkeeperServiceClient(conn), nil
+	return pb.NewUserServiceClient(conn), nil
+}
+
+func DialUpPass(serverPath string) (pb.PasswordServiceClient, error) {
+	conn, err := grpc.Dial(serverPath, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+
+	clientConn = conn
+	return pb.NewPasswordServiceClient(conn), nil
 }
 
 func ConnDown() error {

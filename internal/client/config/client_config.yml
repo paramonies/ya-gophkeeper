@@ -5,5 +5,5 @@ logger:
   log_level: 'debug'
 
 storage:
-  users_storage_path: 'tmp/user-storage'
-  objects_storage_path: 'tmp/object-storage'
+  users_storage_path: '/tmp/user-storage'
+  objects_storage_path: '/tmp/object-storage'

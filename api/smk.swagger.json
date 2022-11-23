@@ -1,12 +1,15 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/gophkeeper/v1/gophkeeper_service.proto",
+    "title": "api/gophkeeper/v1/password_service.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "GophkeeperService"
+      "name": "PasswordService"
+    },
+    {
+      "name": "UserService"
     }
   ],
   "consumes": [
@@ -17,6 +20,14 @@
   ],
   "paths": {},
   "definitions": {
+    "protoCreatePasswordResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
     "protoLoginUserResponse": {
       "type": "object",
       "properties": {

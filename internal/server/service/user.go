@@ -15,7 +15,7 @@ import (
 )
 
 type UserHandler struct {
-	pb.UnimplementedGophkeeperServiceServer
+	pb.UnimplementedUserServiceServer
 	storage store.Connector
 	log     *logger.Logger
 }

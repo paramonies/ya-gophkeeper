@@ -12,9 +12,10 @@ import (
 )
 
 var (
-	log *logger.Logger
-	cli gophkeeper.GophkeeperServiceClient
-	cfg *config.Config
+	log     *logger.Logger
+	cfg     *config.Config
+	cliUser gophkeeper.UserServiceClient
+	cliPass gophkeeper.PasswordServiceClient
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -33,10 +34,11 @@ Type -help to see more.`,
 	},
 }
 
-func Init(l *logger.Logger, c gophkeeper.GophkeeperServiceClient, cf *config.Config) error {
+func Init(l *logger.Logger, cu gophkeeper.UserServiceClient, cp gophkeeper.PasswordServiceClient, cf *config.Config) error {
 	log = l
-	cli = c
 	cfg = cf
+	cliUser = cu
+	cliPass = cp
 	err := rootCmd.Execute()
 	if err != nil {
 		return err
