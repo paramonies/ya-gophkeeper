@@ -40,7 +40,7 @@ func (h *PasswordHandler) CreatePassword(ctx context.Context, req *pb.CreatePass
 
 	userID := utils.GetUserIDFromCTX(ctx)
 
-	res, err := h.storage.Passwords().GetByID(ctx, &dto.GetByIDRequest{
+	res, err := h.storage.Passwords().GetByLogin(ctx, &dto.GetByLoginRequest{
 		Login:  req.GetLogin(),
 		UserID: *userID,
 	})
@@ -86,4 +86,57 @@ func (h *PasswordHandler) CreatePassword(ctx context.Context, req *pb.CreatePass
 	return &pb.CreatePasswordResponse{
 		Status: "New password created",
 	}, nil
+}
+
+func (h *PasswordHandler) GetPassword(ctx context.Context, req *pb.GetPasswordRequest) (*pb.GetPasswordResponse, error) {
+	h.log.Info("GetPassword handler")
+	if req.GetLogin() == "" {
+		return nil, status.Error(codes.InvalidArgument, "invalid argument")
+	}
+
+	userID := utils.GetUserIDFromCTX(ctx)
+
+	res, err := h.storage.Passwords().GetByLogin(ctx, &dto.GetByLoginRequest{
+		Login:  req.GetLogin(),
+		UserID: *userID,
+	})
+	if err != nil {
+		if core.IsNotFound(err) {
+			h.log.Error(fmt.Sprintf("data for login %s not found", req.Login), err)
+			return nil, handleError(err, fmt.Sprintf("data for login %s not found", req.Login))
+		}
+
+		h.log.Error(fmt.Sprintf("failed to obtain latest data for login %s", req.Login), err)
+		return nil, handleError(err, fmt.Sprintf("failed to obtain latest data for login %s", req.Login))
+	}
+
+	return &pb.GetPasswordResponse{
+		Login:    req.Login,
+		Password: res.Password,
+		Meta:     res.Meta,
+		Version:  res.Version,
+	}, nil
+}
+
+func (h *PasswordHandler) DeletePassword(ctx context.Context, req *pb.DeletePasswordRequest) (*pb.DeletePasswordResponse, error) {
+	h.log.Info("DeletePassword")
+	if req.GetLogin() == "" {
+		return nil, status.Error(codes.InvalidArgument, "invalid argument")
+	}
+
+	userID := utils.GetUserIDFromCTX(ctx)
+
+	err := h.storage.Passwords().Delete(ctx, &dto.DeletePasswordRequest{
+		Login:  req.GetLogin(),
+		UserID: *userID,
+	})
+	if err != nil {
+		h.log.Error(fmt.Sprintf("failed to delete data for login %s", req.Login), err)
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to delete data for login %s: %w", req.Login, err))
+	}
+
+	return &pb.DeletePasswordResponse{
+		Status: "success",
+	}, nil
+
 }

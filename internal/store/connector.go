@@ -18,8 +18,6 @@ type UserRepo interface {
 
 type PasswordRepo interface {
 	Create(ctx context.Context, req *dto.CreateRequest) (*dto.CreateResponse, error)
-	GetByID(ctx context.Context, req *dto.GetByIDRequest) (*dto.GetByIDResponse, error)
-	//Get(ctx context.Context, req *dto.GetPasswordRequest) (*dto.GetPasswordResponse, error)
-	//Update(ctx context.Context, req *dto.UpdatePasswordRequest) (*dto.UpdatePasswordResponse, error)
-	//Delete(ctx context.Context, req *dto.DeletePasswordRequest) (*dto.DeletePasswordResponse, error)
+	GetByLogin(ctx context.Context, req *dto.GetByLoginRequest) (*dto.GetByLoginResponse, error)
+	Delete(ctx context.Context, req *dto.DeletePasswordRequest) error
 }

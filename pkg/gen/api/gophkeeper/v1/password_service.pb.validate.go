@@ -248,3 +248,425 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreatePasswordResponseValidationError{}
+
+// Validate checks the field values on GetPasswordRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetPasswordRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetPasswordRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetPasswordRequestMultiError, or nil if none found.
+func (m *GetPasswordRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetPasswordRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Login
+
+	if len(errors) > 0 {
+		return GetPasswordRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetPasswordRequestMultiError is an error wrapping multiple validation errors
+// returned by GetPasswordRequest.ValidateAll() if the designated constraints
+// aren't met.
+type GetPasswordRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetPasswordRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetPasswordRequestMultiError) AllErrors() []error { return m }
+
+// GetPasswordRequestValidationError is the validation error returned by
+// GetPasswordRequest.Validate if the designated constraints aren't met.
+type GetPasswordRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetPasswordRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetPasswordRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetPasswordRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetPasswordRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetPasswordRequestValidationError) ErrorName() string {
+	return "GetPasswordRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetPasswordRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetPasswordRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetPasswordRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetPasswordRequestValidationError{}
+
+// Validate checks the field values on GetPasswordResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetPasswordResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetPasswordResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetPasswordResponseMultiError, or nil if none found.
+func (m *GetPasswordResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetPasswordResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Login
+
+	// no validation rules for Password
+
+	// no validation rules for Meta
+
+	// no validation rules for Version
+
+	if len(errors) > 0 {
+		return GetPasswordResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetPasswordResponseMultiError is an error wrapping multiple validation
+// errors returned by GetPasswordResponse.ValidateAll() if the designated
+// constraints aren't met.
+type GetPasswordResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetPasswordResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetPasswordResponseMultiError) AllErrors() []error { return m }
+
+// GetPasswordResponseValidationError is the validation error returned by
+// GetPasswordResponse.Validate if the designated constraints aren't met.
+type GetPasswordResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetPasswordResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetPasswordResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetPasswordResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetPasswordResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetPasswordResponseValidationError) ErrorName() string {
+	return "GetPasswordResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetPasswordResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetPasswordResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetPasswordResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetPasswordResponseValidationError{}
+
+// Validate checks the field values on DeletePasswordRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DeletePasswordRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DeletePasswordRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DeletePasswordRequestMultiError, or nil if none found.
+func (m *DeletePasswordRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DeletePasswordRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Login
+
+	if len(errors) > 0 {
+		return DeletePasswordRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// DeletePasswordRequestMultiError is an error wrapping multiple validation
+// errors returned by DeletePasswordRequest.ValidateAll() if the designated
+// constraints aren't met.
+type DeletePasswordRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeletePasswordRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeletePasswordRequestMultiError) AllErrors() []error { return m }
+
+// DeletePasswordRequestValidationError is the validation error returned by
+// DeletePasswordRequest.Validate if the designated constraints aren't met.
+type DeletePasswordRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeletePasswordRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeletePasswordRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeletePasswordRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeletePasswordRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeletePasswordRequestValidationError) ErrorName() string {
+	return "DeletePasswordRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeletePasswordRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeletePasswordRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeletePasswordRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeletePasswordRequestValidationError{}
+
+// Validate checks the field values on DeletePasswordResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DeletePasswordResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DeletePasswordResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DeletePasswordResponseMultiError, or nil if none found.
+func (m *DeletePasswordResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DeletePasswordResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Status
+
+	if len(errors) > 0 {
+		return DeletePasswordResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// DeletePasswordResponseMultiError is an error wrapping multiple validation
+// errors returned by DeletePasswordResponse.ValidateAll() if the designated
+// constraints aren't met.
+type DeletePasswordResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeletePasswordResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeletePasswordResponseMultiError) AllErrors() []error { return m }
+
+// DeletePasswordResponseValidationError is the validation error returned by
+// DeletePasswordResponse.Validate if the designated constraints aren't met.
+type DeletePasswordResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeletePasswordResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeletePasswordResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeletePasswordResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeletePasswordResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeletePasswordResponseValidationError) ErrorName() string {
+	return "DeletePasswordResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeletePasswordResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeletePasswordResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeletePasswordResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeletePasswordResponseValidationError{}

@@ -12,12 +12,12 @@ type CreateResponse struct {
 	PasswordID string
 }
 
-type GetByIDRequest struct {
+type GetByLoginRequest struct {
 	Login  string
 	UserID string
 }
 
-type GetByIDResponse struct {
+type GetByLoginResponse struct {
 	ID       string
 	UserID   string
 	Login    string
@@ -26,20 +26,7 @@ type GetByIDResponse struct {
 	Version  uint32
 }
 
-type GetPasswordRequest struct {
-}
-
-type GetPasswordResponse struct {
-}
-
-type UpdatePasswordRequest struct {
-}
-
-type UpdatePasswordResponse struct {
-}
-
 type DeletePasswordRequest struct {
-}
-
-type DeletePasswordResponse struct {
+	Login  string
+	UserID string
 }

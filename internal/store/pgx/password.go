@@ -59,7 +59,7 @@ RETURNING id
 	}, nil
 }
 
-func (r *PasswordRepo) GetByID(ctx context.Context, req *dto.GetByIDRequest) (*dto.GetByIDResponse, error) {
+func (r *PasswordRepo) GetByLogin(ctx context.Context, req *dto.GetByLoginRequest) (*dto.GetByLoginResponse, error) {
 	query := `
 SELECT login, password, meta, version FROM passwords
 WHERE login=$1 AND user_id=$2 AND deleted_at isnull ORDER BY version DESC LIMIT 1
@@ -83,7 +83,7 @@ WHERE login=$1 AND user_id=$2 AND deleted_at isnull ORDER BY version DESC LIMIT 
 		return nil, err
 	}
 
-	return &dto.GetByIDResponse{
+	return &dto.GetByLoginResponse{
 		ID:       id,
 		UserID:   req.UserID,
 		Login:    req.Login,
@@ -91,4 +91,18 @@ WHERE login=$1 AND user_id=$2 AND deleted_at isnull ORDER BY version DESC LIMIT 
 		Meta:     meta,
 		Version:  version,
 	}, nil
+}
+
+func (r *PasswordRepo) Delete(ctx context.Context, req *dto.DeletePasswordRequest) error {
+	query := `
+UPDATE passwords SET deleted_at = current_timestamp WHERE login = $1 AND user_id = $2
+`
+	ctx, cancel := context.WithTimeout(ctx, r.queryTimeout)
+	defer cancel()
+
+	if _, err := r.pool.Exec(ctx, query, req.Login, req.UserID); err != nil {
+		return fmt.Errorf("error deleting password for %s login: %w", req.Login, err)
+	}
+
+	return nil
 }

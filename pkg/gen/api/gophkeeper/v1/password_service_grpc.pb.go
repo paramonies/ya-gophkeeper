@@ -23,6 +23,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PasswordServiceClient interface {
 	CreatePassword(ctx context.Context, in *CreatePasswordRequest, opts ...grpc.CallOption) (*CreatePasswordResponse, error)
+	GetPassword(ctx context.Context, in *GetPasswordRequest, opts ...grpc.CallOption) (*GetPasswordResponse, error)
+	DeletePassword(ctx context.Context, in *DeletePasswordRequest, opts ...grpc.CallOption) (*DeletePasswordResponse, error)
 }
 
 type passwordServiceClient struct {
@@ -42,11 +44,31 @@ func (c *passwordServiceClient) CreatePassword(ctx context.Context, in *CreatePa
 	return out, nil
 }
 
+func (c *passwordServiceClient) GetPassword(ctx context.Context, in *GetPasswordRequest, opts ...grpc.CallOption) (*GetPasswordResponse, error) {
+	out := new(GetPasswordResponse)
+	err := c.cc.Invoke(ctx, "/proto.PasswordService/GetPassword", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *passwordServiceClient) DeletePassword(ctx context.Context, in *DeletePasswordRequest, opts ...grpc.CallOption) (*DeletePasswordResponse, error) {
+	out := new(DeletePasswordResponse)
+	err := c.cc.Invoke(ctx, "/proto.PasswordService/DeletePassword", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PasswordServiceServer is the server API for PasswordService service.
 // All implementations should embed UnimplementedPasswordServiceServer
 // for forward compatibility
 type PasswordServiceServer interface {
 	CreatePassword(context.Context, *CreatePasswordRequest) (*CreatePasswordResponse, error)
+	GetPassword(context.Context, *GetPasswordRequest) (*GetPasswordResponse, error)
+	DeletePassword(context.Context, *DeletePasswordRequest) (*DeletePasswordResponse, error)
 }
 
 // UnimplementedPasswordServiceServer should be embedded to have forward compatible implementations.
@@ -55,6 +77,12 @@ type UnimplementedPasswordServiceServer struct {
 
 func (UnimplementedPasswordServiceServer) CreatePassword(context.Context, *CreatePasswordRequest) (*CreatePasswordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePassword not implemented")
+}
+func (UnimplementedPasswordServiceServer) GetPassword(context.Context, *GetPasswordRequest) (*GetPasswordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPassword not implemented")
+}
+func (UnimplementedPasswordServiceServer) DeletePassword(context.Context, *DeletePasswordRequest) (*DeletePasswordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeletePassword not implemented")
 }
 
 // UnsafePasswordServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -86,6 +114,42 @@ func _PasswordService_CreatePassword_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PasswordService_GetPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PasswordServiceServer).GetPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.PasswordService/GetPassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PasswordServiceServer).GetPassword(ctx, req.(*GetPasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PasswordService_DeletePassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeletePasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PasswordServiceServer).DeletePassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.PasswordService/DeletePassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PasswordServiceServer).DeletePassword(ctx, req.(*DeletePasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PasswordService_ServiceDesc is the grpc.ServiceDesc for PasswordService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -96,6 +160,14 @@ var PasswordService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreatePassword",
 			Handler:    _PasswordService_CreatePassword_Handler,
+		},
+		{
+			MethodName: "GetPassword",
+			Handler:    _PasswordService_GetPassword_Handler,
+		},
+		{
+			MethodName: "DeletePassword",
+			Handler:    _PasswordService_DeletePassword_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
