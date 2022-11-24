@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"github.com/paramonies/ya-gophkeeper/internal/model"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -90,3 +91,48 @@ func (h *UserHandler) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 		Jwt:    token,
 	}, nil
 }
+
+func (h *UserHandler) SyncUserData(ctx context.Context, req *pb.SyncUserDataRequest) (*pb.SyncUserDataResponse, error) {
+	h.log.Info("SyncUserData handler")
+
+	userID := util.GetUserIDFromCTX(ctx)
+	pwdData, err := h.storage.Passwords().GetAll(ctx, &dto.GetAllRequest{
+		UserID: *userID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	pwd := pwdData.Passwords
+	fmt.Println("!!!")
+	for _, p := range pwd {
+		fmt.Printf("%s %s %s %d \n", p.Login, p.Password, p.Meta, p.Version)
+	}
+
+	return &pb.SyncUserDataResponse{
+		Passwords: model.PasswordModelstoProto(pwdData.Passwords),
+		Texts:     nil,
+		Binaries:  nil,
+		Cards:     nil,
+	}, nil
+}
+
+//func (h *UserHandler) getAllServerDataLastVersion(ctx context.Context, userID string) (*model.ServerData, error) {
+//	var err error
+//	data := new(model.ServerData)
+//	pwdData, err := h.storage.Passwords().GetAll(ctx, &dto.GetAllRequest{
+//		UserID: userID,
+//	})
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	pwd := pwdData.Passwords
+//	fmt.Println("!!!")
+//	for _, p := range pwd {
+//		fmt.Printf("%s %s %s %d \n", p.Login, p.Password, p.Meta, p.Version)
+//	}
+//
+//	data.Passwords = pwdData.Passwords
+//	return data, nil
+//}

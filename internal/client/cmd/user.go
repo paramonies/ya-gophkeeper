@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"google.golang.org/grpc/status"
 	"os/user"
 	"time"
 
@@ -17,6 +18,7 @@ import (
 var (
 	registerUser pb.RegisterUserRequest
 	loginUser    pb.LoginUserRequest
+	syncUserData pb.SyncUserDataResponse
 )
 
 func init() {
@@ -31,6 +33,8 @@ func init() {
 	loginUserCmd.Flags().StringVarP(&loginUser.Password, "password", "p", "", "New user password value.")
 	loginUserCmd.MarkFlagRequired("login")
 	loginUserCmd.MarkFlagRequired("password")
+
+	rootCmd.AddCommand(syncUserDataCmd)
 }
 
 // registerUserCmd represents the registerUser command
@@ -121,5 +125,62 @@ Usage: gophkeeperclient loginUser --login=<login> --password=<password>.`,
 		//clstor.Local[u.Username] = updVault
 
 		log.Info(fmt.Sprintf("user %s loged in!", loginUser.GetLogin()), "userID", response.GetUserID())
+	},
+}
+
+// syncUserDataCmd represents the syncUserData command
+var syncUserDataCmd = &cobra.Command{
+	Use:   "syncUserData",
+	Short: "Synchronize local user data with the server database",
+	Long: `
+This command provides latest data from the server database.
+Then the database data, with version higher, that the local version, is saved to local storage.
+During the saving of local data to the database, in case of version conflict(database version is higher/newer), you will be alerted by a warning.
+Usage: gophkeeperclient syncUserData`,
+	Run: func(cmd *cobra.Command, args []string) {
+		// get current user from os/user. Like this we can locally identify if the user changed.
+		u, err := user.Current()
+		if err != nil {
+			log.Fatal("failed to get current linux user", err)
+		}
+
+		jwt, ok := storage.Users[u.Username]
+		if !ok {
+			log.Fatal("user not authenticated", err)
+		}
+
+		// local version not found - search on server
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+		defer cancel()
+
+		newCtx := metadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+jwt)
+
+		// send data to server and receive JWT in case of success. then save it in Users
+		data, err := cliUser.SyncUserData(newCtx, &pb.SyncUserDataRequest{})
+		if err != nil {
+			st, _ := status.FromError(err)
+			msg := fmt.Sprintf("request failed. statusCode: %v, message: %s", st.Code(), st.Message())
+			log.Error(msg, err)
+			return
+		}
+
+		fmt.Println("!!!")
+		for _, p := range data.Passwords {
+			fmt.Printf("%s %s %s %d \n", p.GetLogin(), p.GetPassword(), p.GetMeta(), p.GetVersion())
+		}
+
+		//// check server response
+		//if response.GetStatus() != "success" {
+		//	log.Println(response.GetStatus())
+		//	fmt.Println("request failed. please try again.")
+		//	return
+		//}
+		//
+		////check for latest version data
+		//syncVault := clserv.CombineVault(clstor.Local[u.Username], clserv.VaultSyncConvert(response))
+		//
+		//// save actual data
+		//clstor.Local[u.Username] = syncVault
+		//fmt.Println(response.GetStatus())
 	},
 }

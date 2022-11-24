@@ -29,3 +29,11 @@ type LocalStorage struct {
 	Binary   map[string]*Binary   `json:"binary"`
 	Card     map[string]*Card     `json:"card"`
 }
+
+// Server data
+type ServerData struct {
+	Passwords []*Password `json:"passwords"`
+	Texts     []*Text     `json:"texts"`
+	Binaries  []*Binary   `json:"binaries"`
+	Cards     []*Card     `json:"cards"`
+}

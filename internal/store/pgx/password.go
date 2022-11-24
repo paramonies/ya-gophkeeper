@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/paramonies/ya-gophkeeper/internal/model"
 	"time"
 
 	"github.com/jackc/pgconn"
@@ -90,6 +91,57 @@ WHERE login=$1 AND user_id=$2 AND deleted_at isnull ORDER BY version DESC LIMIT 
 		Password: password,
 		Meta:     meta,
 		Version:  version,
+	}, nil
+}
+
+func (r *PasswordRepo) GetAll(ctx context.Context, req *dto.GetAllRequest) (*dto.GetAllResponse, error) {
+	query := `
+SELECT DISTINCT ON (login) login, password, meta, version 
+FROM passwords WHERE user_id = $1 AND deleted_at isnull ORDER BY login, version DESC
+`
+
+	ctx, cancel := context.WithTimeout(ctx, r.queryTimeout)
+	defer cancel()
+
+	rows, err := r.pool.Query(ctx, query, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	pwds := make([]*model.Password, 0)
+	fmt.Println("inside GetAll 2", req.UserID)
+	for rows.Next() {
+		fmt.Println("inside GetAll 3")
+		var (
+			login    string
+			password string
+			meta     string
+			version  uint32
+		)
+
+		err = rows.Scan(&login, &password, &meta, &version)
+		if err != nil {
+			return nil, err
+		}
+
+		fmt.Printf("%s %s %s %d \n", login, password, meta, version)
+
+		pwd := &model.Password{
+			Login:    login,
+			Password: password,
+			Meta:     meta,
+			Version:  version,
+		}
+		pwds = append(pwds, pwd)
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.GetAllResponse{
+		Passwords: pwds,
 	}, nil
 }
 

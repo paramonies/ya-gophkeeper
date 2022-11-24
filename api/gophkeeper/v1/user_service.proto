@@ -9,6 +9,7 @@ import "google/protobuf/timestamp.proto";
 service UserService {
   rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
   rpc LoginUser(LoginUserRequest) returns (LoginUserResponse);
+  rpc SyncUserData(SyncUserDataRequest) returns (SyncUserDataResponse);
 }
 
 message RegisterUserRequest{
@@ -29,4 +30,34 @@ message LoginUserRequest{
 message LoginUserResponse{
   string userID = 1;
   string jwt = 2;
+}
+
+message SyncUserDataRequest {
+
+}
+
+message SyncUserDataResponse {
+  repeated Password passwords = 1;
+  repeated Text texts = 2;
+  repeated Binary binaries = 3;
+  repeated Card cards = 4;
+}
+
+message Password {
+  string login = 1;
+  string password = 2;
+  string meta = 3;
+  uint32 version = 4;
+}
+
+message Text {
+
+}
+
+message Binary {
+
+}
+
+message Card {
+
 }

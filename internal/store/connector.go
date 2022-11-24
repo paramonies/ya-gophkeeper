@@ -19,5 +19,6 @@ type UserRepo interface {
 type PasswordRepo interface {
 	Create(ctx context.Context, req *dto.CreateRequest) (*dto.CreateResponse, error)
 	GetByLogin(ctx context.Context, req *dto.GetByLoginRequest) (*dto.GetByLoginResponse, error)
+	GetAll(ctx context.Context, req *dto.GetAllRequest) (*dto.GetAllResponse, error)
 	Delete(ctx context.Context, req *dto.DeletePasswordRequest) error
 }
