@@ -4,18 +4,26 @@ import (
 	pb "github.com/paramonies/ya-gophkeeper/pkg/gen/api/gophkeeper/v1"
 )
 
-func PasswordModelstoProto(pwds []*Password) []*pb.Password {
-	res := make([]*pb.Password, len(pwds))
-
-	for _, pwd := range pwds {
-		r := &pb.Password{
-			Login:    pwd.Login,
-			Password: pwd.Password,
-			Meta:     pwd.Meta,
-			Version:  pwd.Version,
-		}
-
-		res = append(res, r)
+func ProtoToLocalStorage(in *pb.GetAllUserDataFromDBResponse) *LocalStorage {
+	return &LocalStorage{
+		Password: createPasswordMap(in.Passwords),
+		// todo: make for other entities
 	}
-	return res
 }
+
+func createPasswordMap(pwds []*pb.Password) map[string]*Password {
+	out := make(map[string]*Password)
+
+	for _, p := range pwds {
+		out[p.GetLogin()] = &Password{
+			Login:    p.GetLogin(),
+			Password: p.GetPassword(),
+			Meta:     p.GetMeta(),
+			Version:  p.GetVersion(),
+		}
+	}
+
+	return out
+}
+
+// todo: createMap make for other entities

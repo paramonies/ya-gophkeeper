@@ -9,7 +9,7 @@ import "google/protobuf/timestamp.proto";
 service UserService {
   rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
   rpc LoginUser(LoginUserRequest) returns (LoginUserResponse);
-  rpc SyncUserData(SyncUserDataRequest) returns (SyncUserDataResponse);
+  rpc GetAllUserDataFromDB(GetAllUserDataFromDBRequest) returns (GetAllUserDataFromDBResponse);
 }
 
 message RegisterUserRequest{
@@ -32,11 +32,11 @@ message LoginUserResponse{
   string jwt = 2;
 }
 
-message SyncUserDataRequest {
+message GetAllUserDataFromDBRequest {
 
 }
 
-message SyncUserDataResponse {
+message GetAllUserDataFromDBResponse {
   repeated Password passwords = 1;
   repeated Text texts = 2;
   repeated Binary binaries = 3;

@@ -457,22 +457,22 @@ var _ interface {
 	ErrorName() string
 } = LoginUserResponseValidationError{}
 
-// Validate checks the field values on SyncUserDataRequest with the rules
-// defined in the proto definition for this message. If any rules are
+// Validate checks the field values on GetAllUserDataFromDBRequest with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *SyncUserDataRequest) Validate() error {
+func (m *GetAllUserDataFromDBRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on SyncUserDataRequest with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on GetAllUserDataFromDBRequest with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// SyncUserDataRequestMultiError, or nil if none found.
-func (m *SyncUserDataRequest) ValidateAll() error {
+// GetAllUserDataFromDBRequestMultiError, or nil if none found.
+func (m *GetAllUserDataFromDBRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *SyncUserDataRequest) validate(all bool) error {
+func (m *GetAllUserDataFromDBRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -480,19 +480,19 @@ func (m *SyncUserDataRequest) validate(all bool) error {
 	var errors []error
 
 	if len(errors) > 0 {
-		return SyncUserDataRequestMultiError(errors)
+		return GetAllUserDataFromDBRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// SyncUserDataRequestMultiError is an error wrapping multiple validation
-// errors returned by SyncUserDataRequest.ValidateAll() if the designated
-// constraints aren't met.
-type SyncUserDataRequestMultiError []error
+// GetAllUserDataFromDBRequestMultiError is an error wrapping multiple
+// validation errors returned by GetAllUserDataFromDBRequest.ValidateAll() if
+// the designated constraints aren't met.
+type GetAllUserDataFromDBRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m SyncUserDataRequestMultiError) Error() string {
+func (m GetAllUserDataFromDBRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -501,11 +501,12 @@ func (m SyncUserDataRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m SyncUserDataRequestMultiError) AllErrors() []error { return m }
+func (m GetAllUserDataFromDBRequestMultiError) AllErrors() []error { return m }
 
-// SyncUserDataRequestValidationError is the validation error returned by
-// SyncUserDataRequest.Validate if the designated constraints aren't met.
-type SyncUserDataRequestValidationError struct {
+// GetAllUserDataFromDBRequestValidationError is the validation error returned
+// by GetAllUserDataFromDBRequest.Validate if the designated constraints
+// aren't met.
+type GetAllUserDataFromDBRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -513,24 +514,24 @@ type SyncUserDataRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e SyncUserDataRequestValidationError) Field() string { return e.field }
+func (e GetAllUserDataFromDBRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e SyncUserDataRequestValidationError) Reason() string { return e.reason }
+func (e GetAllUserDataFromDBRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e SyncUserDataRequestValidationError) Cause() error { return e.cause }
+func (e GetAllUserDataFromDBRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e SyncUserDataRequestValidationError) Key() bool { return e.key }
+func (e GetAllUserDataFromDBRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e SyncUserDataRequestValidationError) ErrorName() string {
-	return "SyncUserDataRequestValidationError"
+func (e GetAllUserDataFromDBRequestValidationError) ErrorName() string {
+	return "GetAllUserDataFromDBRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e SyncUserDataRequestValidationError) Error() string {
+func (e GetAllUserDataFromDBRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -542,14 +543,14 @@ func (e SyncUserDataRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sSyncUserDataRequest.%s: %s%s",
+		"invalid %sGetAllUserDataFromDBRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = SyncUserDataRequestValidationError{}
+var _ error = GetAllUserDataFromDBRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -557,24 +558,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = SyncUserDataRequestValidationError{}
+} = GetAllUserDataFromDBRequestValidationError{}
 
-// Validate checks the field values on SyncUserDataResponse with the rules
-// defined in the proto definition for this message. If any rules are
+// Validate checks the field values on GetAllUserDataFromDBResponse with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *SyncUserDataResponse) Validate() error {
+func (m *GetAllUserDataFromDBResponse) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on SyncUserDataResponse with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on GetAllUserDataFromDBResponse with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// SyncUserDataResponseMultiError, or nil if none found.
-func (m *SyncUserDataResponse) ValidateAll() error {
+// GetAllUserDataFromDBResponseMultiError, or nil if none found.
+func (m *GetAllUserDataFromDBResponse) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *SyncUserDataResponse) validate(all bool) error {
+func (m *GetAllUserDataFromDBResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -588,7 +589,7 @@ func (m *SyncUserDataResponse) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, SyncUserDataResponseValidationError{
+					errors = append(errors, GetAllUserDataFromDBResponseValidationError{
 						field:  fmt.Sprintf("Passwords[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -596,7 +597,7 @@ func (m *SyncUserDataResponse) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, SyncUserDataResponseValidationError{
+					errors = append(errors, GetAllUserDataFromDBResponseValidationError{
 						field:  fmt.Sprintf("Passwords[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -605,7 +606,7 @@ func (m *SyncUserDataResponse) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return SyncUserDataResponseValidationError{
+				return GetAllUserDataFromDBResponseValidationError{
 					field:  fmt.Sprintf("Passwords[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -622,7 +623,7 @@ func (m *SyncUserDataResponse) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, SyncUserDataResponseValidationError{
+					errors = append(errors, GetAllUserDataFromDBResponseValidationError{
 						field:  fmt.Sprintf("Texts[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -630,7 +631,7 @@ func (m *SyncUserDataResponse) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, SyncUserDataResponseValidationError{
+					errors = append(errors, GetAllUserDataFromDBResponseValidationError{
 						field:  fmt.Sprintf("Texts[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -639,7 +640,7 @@ func (m *SyncUserDataResponse) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return SyncUserDataResponseValidationError{
+				return GetAllUserDataFromDBResponseValidationError{
 					field:  fmt.Sprintf("Texts[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -656,7 +657,7 @@ func (m *SyncUserDataResponse) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, SyncUserDataResponseValidationError{
+					errors = append(errors, GetAllUserDataFromDBResponseValidationError{
 						field:  fmt.Sprintf("Binaries[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -664,7 +665,7 @@ func (m *SyncUserDataResponse) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, SyncUserDataResponseValidationError{
+					errors = append(errors, GetAllUserDataFromDBResponseValidationError{
 						field:  fmt.Sprintf("Binaries[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -673,7 +674,7 @@ func (m *SyncUserDataResponse) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return SyncUserDataResponseValidationError{
+				return GetAllUserDataFromDBResponseValidationError{
 					field:  fmt.Sprintf("Binaries[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -690,7 +691,7 @@ func (m *SyncUserDataResponse) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, SyncUserDataResponseValidationError{
+					errors = append(errors, GetAllUserDataFromDBResponseValidationError{
 						field:  fmt.Sprintf("Cards[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -698,7 +699,7 @@ func (m *SyncUserDataResponse) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, SyncUserDataResponseValidationError{
+					errors = append(errors, GetAllUserDataFromDBResponseValidationError{
 						field:  fmt.Sprintf("Cards[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -707,7 +708,7 @@ func (m *SyncUserDataResponse) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return SyncUserDataResponseValidationError{
+				return GetAllUserDataFromDBResponseValidationError{
 					field:  fmt.Sprintf("Cards[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -718,19 +719,19 @@ func (m *SyncUserDataResponse) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return SyncUserDataResponseMultiError(errors)
+		return GetAllUserDataFromDBResponseMultiError(errors)
 	}
 
 	return nil
 }
 
-// SyncUserDataResponseMultiError is an error wrapping multiple validation
-// errors returned by SyncUserDataResponse.ValidateAll() if the designated
-// constraints aren't met.
-type SyncUserDataResponseMultiError []error
+// GetAllUserDataFromDBResponseMultiError is an error wrapping multiple
+// validation errors returned by GetAllUserDataFromDBResponse.ValidateAll() if
+// the designated constraints aren't met.
+type GetAllUserDataFromDBResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m SyncUserDataResponseMultiError) Error() string {
+func (m GetAllUserDataFromDBResponseMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -739,11 +740,12 @@ func (m SyncUserDataResponseMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m SyncUserDataResponseMultiError) AllErrors() []error { return m }
+func (m GetAllUserDataFromDBResponseMultiError) AllErrors() []error { return m }
 
-// SyncUserDataResponseValidationError is the validation error returned by
-// SyncUserDataResponse.Validate if the designated constraints aren't met.
-type SyncUserDataResponseValidationError struct {
+// GetAllUserDataFromDBResponseValidationError is the validation error returned
+// by GetAllUserDataFromDBResponse.Validate if the designated constraints
+// aren't met.
+type GetAllUserDataFromDBResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -751,24 +753,24 @@ type SyncUserDataResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e SyncUserDataResponseValidationError) Field() string { return e.field }
+func (e GetAllUserDataFromDBResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e SyncUserDataResponseValidationError) Reason() string { return e.reason }
+func (e GetAllUserDataFromDBResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e SyncUserDataResponseValidationError) Cause() error { return e.cause }
+func (e GetAllUserDataFromDBResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e SyncUserDataResponseValidationError) Key() bool { return e.key }
+func (e GetAllUserDataFromDBResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e SyncUserDataResponseValidationError) ErrorName() string {
-	return "SyncUserDataResponseValidationError"
+func (e GetAllUserDataFromDBResponseValidationError) ErrorName() string {
+	return "GetAllUserDataFromDBResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e SyncUserDataResponseValidationError) Error() string {
+func (e GetAllUserDataFromDBResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -780,14 +782,14 @@ func (e SyncUserDataResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sSyncUserDataResponse.%s: %s%s",
+		"invalid %sGetAllUserDataFromDBResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = SyncUserDataResponseValidationError{}
+var _ error = GetAllUserDataFromDBResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -795,7 +797,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = SyncUserDataResponseValidationError{}
+} = GetAllUserDataFromDBResponseValidationError{}
 
 // Validate checks the field values on Password with the rules defined in the
 // proto definition for this message. If any rules are violated, the first

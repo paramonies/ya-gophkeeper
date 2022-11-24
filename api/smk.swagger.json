@@ -42,6 +42,35 @@
         }
       }
     },
+    "protoGetAllUserDataFromDBResponse": {
+      "type": "object",
+      "properties": {
+        "passwords": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protoPassword"
+          }
+        },
+        "texts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protoText"
+          }
+        },
+        "binaries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protoBinary"
+          }
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protoCard"
+          }
+        }
+      }
+    },
     "protoGetPasswordResponse": {
       "type": "object",
       "properties": {
@@ -97,35 +126,6 @@
         },
         "jwt": {
           "type": "string"
-        }
-      }
-    },
-    "protoSyncUserDataResponse": {
-      "type": "object",
-      "properties": {
-        "passwords": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/protoPassword"
-          }
-        },
-        "texts": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/protoText"
-          }
-        },
-        "binaries": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/protoBinary"
-          }
-        },
-        "cards": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/protoCard"
-          }
         }
       }
     },

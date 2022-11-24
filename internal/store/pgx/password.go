@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/paramonies/ya-gophkeeper/internal/model"
 	"time"
+
+	"github.com/paramonies/ya-gophkeeper/internal/model"
 
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgerrcode"

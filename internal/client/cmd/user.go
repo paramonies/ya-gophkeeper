@@ -3,13 +3,14 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"google.golang.org/grpc/status"
 	"os/user"
 	"time"
 
-	"google.golang.org/grpc/metadata"
-
 	"github.com/spf13/cobra"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
+
+	"github.com/paramonies/ya-gophkeeper/internal/model"
 
 	"github.com/paramonies/ya-gophkeeper/internal/client/storage"
 	pb "github.com/paramonies/ya-gophkeeper/pkg/gen/api/gophkeeper/v1"
@@ -18,7 +19,7 @@ import (
 var (
 	registerUser pb.RegisterUserRequest
 	loginUser    pb.LoginUserRequest
-	syncUserData pb.SyncUserDataResponse
+	syncUserData pb.GetAllUserDataFromDBResponse
 )
 
 func init() {
@@ -156,7 +157,7 @@ Usage: gophkeeperclient syncUserData`,
 		newCtx := metadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+jwt)
 
 		// send data to server and receive JWT in case of success. then save it in Users
-		data, err := cliUser.SyncUserData(newCtx, &pb.SyncUserDataRequest{})
+		dataDB, err := cliUser.GetAllUserDataFromDB(newCtx, &pb.GetAllUserDataFromDBRequest{})
 		if err != nil {
 			st, _ := status.FromError(err)
 			msg := fmt.Sprintf("request failed. statusCode: %v, message: %s", st.Code(), st.Message())
@@ -165,22 +166,33 @@ Usage: gophkeeperclient syncUserData`,
 		}
 
 		fmt.Println("!!!")
-		for _, p := range data.Passwords {
+		for _, p := range dataDB.Passwords {
 			fmt.Printf("%s %s %s %d \n", p.GetLogin(), p.GetPassword(), p.GetMeta(), p.GetVersion())
 		}
 
-		//// check server response
-		//if response.GetStatus() != "success" {
-		//	log.Println(response.GetStatus())
-		//	fmt.Println("request failed. please try again.")
-		//	return
-		//}
+		for _, p := range storage.Objects[u.Username].Password {
+			info := fmt.Sprintf("!!!login: %s, password: %s, meta: %s, version: %d", p.Login, p.Password, p.Meta, p.Version)
+			fmt.Println(info)
+		}
+
+		// check for latest version data
+		lastVerData := storage.SyncData(storage.Objects[u.Username], model.ProtoToLocalStorage(dataDB))
 		//
-		////check for latest version data
-		//syncVault := clserv.CombineVault(clstor.Local[u.Username], clserv.VaultSyncConvert(response))
-		//
-		//// save actual data
-		//clstor.Local[u.Username] = syncVault
-		//fmt.Println(response.GetStatus())
+		// save actual data
+		storage.Objects[u.Username] = lastVerData
+
+		err = storage.UpdateFiles(cfg.UsersStoragePath, cfg.ObjectsStoragePath)
+		if err != nil {
+			log.Error("failed to update local storage files", err)
+			return
+		}
+
+		log.Info("user data synchronized!")
+		for _, p := range storage.Objects[u.Username].Password {
+			info := fmt.Sprintf("login: %s, password: %s, meta: %s, version: %d", p.Login, p.Password, p.Meta, p.Version)
+			fmt.Println(info)
+		}
+
+		return
 	},
 }

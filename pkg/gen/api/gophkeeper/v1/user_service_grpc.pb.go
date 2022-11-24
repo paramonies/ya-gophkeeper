@@ -24,7 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type UserServiceClient interface {
 	RegisterUser(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*RegisterUserResponse, error)
 	LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*LoginUserResponse, error)
-	SyncUserData(ctx context.Context, in *SyncUserDataRequest, opts ...grpc.CallOption) (*SyncUserDataResponse, error)
+	GetAllUserDataFromDB(ctx context.Context, in *GetAllUserDataFromDBRequest, opts ...grpc.CallOption) (*GetAllUserDataFromDBResponse, error)
 }
 
 type userServiceClient struct {
@@ -53,9 +53,9 @@ func (c *userServiceClient) LoginUser(ctx context.Context, in *LoginUserRequest,
 	return out, nil
 }
 
-func (c *userServiceClient) SyncUserData(ctx context.Context, in *SyncUserDataRequest, opts ...grpc.CallOption) (*SyncUserDataResponse, error) {
-	out := new(SyncUserDataResponse)
-	err := c.cc.Invoke(ctx, "/proto.UserService/SyncUserData", in, out, opts...)
+func (c *userServiceClient) GetAllUserDataFromDB(ctx context.Context, in *GetAllUserDataFromDBRequest, opts ...grpc.CallOption) (*GetAllUserDataFromDBResponse, error) {
+	out := new(GetAllUserDataFromDBResponse)
+	err := c.cc.Invoke(ctx, "/proto.UserService/GetAllUserDataFromDB", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (c *userServiceClient) SyncUserData(ctx context.Context, in *SyncUserDataRe
 type UserServiceServer interface {
 	RegisterUser(context.Context, *RegisterUserRequest) (*RegisterUserResponse, error)
 	LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error)
-	SyncUserData(context.Context, *SyncUserDataRequest) (*SyncUserDataResponse, error)
+	GetAllUserDataFromDB(context.Context, *GetAllUserDataFromDBRequest) (*GetAllUserDataFromDBResponse, error)
 }
 
 // UnimplementedUserServiceServer should be embedded to have forward compatible implementations.
@@ -81,8 +81,8 @@ func (UnimplementedUserServiceServer) RegisterUser(context.Context, *RegisterUse
 func (UnimplementedUserServiceServer) LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
 }
-func (UnimplementedUserServiceServer) SyncUserData(context.Context, *SyncUserDataRequest) (*SyncUserDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SyncUserData not implemented")
+func (UnimplementedUserServiceServer) GetAllUserDataFromDB(context.Context, *GetAllUserDataFromDBRequest) (*GetAllUserDataFromDBResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllUserDataFromDB not implemented")
 }
 
 // UnsafeUserServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -132,20 +132,20 @@ func _UserService_LoginUser_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_SyncUserData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SyncUserDataRequest)
+func _UserService_GetAllUserDataFromDB_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllUserDataFromDBRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).SyncUserData(ctx, in)
+		return srv.(UserServiceServer).GetAllUserDataFromDB(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.UserService/SyncUserData",
+		FullMethod: "/proto.UserService/GetAllUserDataFromDB",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).SyncUserData(ctx, req.(*SyncUserDataRequest))
+		return srv.(UserServiceServer).GetAllUserDataFromDB(ctx, req.(*GetAllUserDataFromDBRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -166,8 +166,8 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_LoginUser_Handler,
 		},
 		{
-			MethodName: "SyncUserData",
-			Handler:    _UserService_SyncUserData_Handler,
+			MethodName: "GetAllUserDataFromDB",
+			Handler:    _UserService_GetAllUserDataFromDB_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

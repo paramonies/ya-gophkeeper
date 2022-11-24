@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/paramonies/ya-gophkeeper/internal/model"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -92,7 +91,7 @@ func (h *UserHandler) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 	}, nil
 }
 
-func (h *UserHandler) SyncUserData(ctx context.Context, req *pb.SyncUserDataRequest) (*pb.SyncUserDataResponse, error) {
+func (h *UserHandler) GetAllUserDataFromDB(ctx context.Context, req *pb.GetAllUserDataFromDBRequest) (*pb.GetAllUserDataFromDBResponse, error) {
 	h.log.Info("SyncUserData handler")
 
 	userID := util.GetUserIDFromCTX(ctx)
@@ -109,8 +108,8 @@ func (h *UserHandler) SyncUserData(ctx context.Context, req *pb.SyncUserDataRequ
 		fmt.Printf("%s %s %s %d \n", p.Login, p.Password, p.Meta, p.Version)
 	}
 
-	return &pb.SyncUserDataResponse{
-		Passwords: model.PasswordModelstoProto(pwdData.Passwords),
+	return &pb.GetAllUserDataFromDBResponse{
+		Passwords: PasswordModelsToProto(pwdData.Passwords),
 		Texts:     nil,
 		Binaries:  nil,
 		Cards:     nil,

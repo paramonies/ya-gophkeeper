@@ -14,12 +14,15 @@ type Password struct {
 }
 
 type Text struct {
+	Version uint32 `json:"version"`
 }
 
 type Binary struct {
+	Version uint32 `json:"version"`
 }
 
 type Card struct {
+	Version uint32 `json:"version"`
 }
 
 // LocalStorage is a local struct for client data
