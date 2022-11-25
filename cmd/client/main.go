@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	client "github.com/paramonies/ya-gophkeeper/internal/client"
+	"github.com/paramonies/ya-gophkeeper/internal/client"
 	"github.com/paramonies/ya-gophkeeper/internal/client/cmd"
 	"github.com/paramonies/ya-gophkeeper/internal/client/config"
 	"github.com/paramonies/ya-gophkeeper/internal/client/storage"
@@ -19,17 +19,13 @@ func main() {
 		log.Fatal("failed to parse client config", err)
 	}
 
-	_, err = os.OpenFile(cfg.UsersStoragePath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0777)
-	if err != nil {
-		log.Fatal("failed to create file ", err)
-	}
-
 	l := logger.New(cfg.Log.Level)
-	l.Info("start gophkeeper client service")
+	l.Info("start gophkeeper client")
 
 	err = storage.InitStorage(cfg.UsersStoragePath, cfg.ObjectsStoragePath)
 	if err != nil {
-		log.Fatal("failed to init client local storage ", err)
+		l.Error("failed to init client local storage ", err)
+		os.Exit(errorExitCode)
 	}
 	l.Info("local storage initialized")
 

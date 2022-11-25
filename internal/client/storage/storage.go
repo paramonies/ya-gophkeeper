@@ -2,8 +2,6 @@ package storage
 
 import (
 	"encoding/json"
-	"io/ioutil"
-	"log"
 	"os"
 
 	"github.com/paramonies/ya-gophkeeper/internal/model"
@@ -45,14 +43,11 @@ func initUsers(filePath string) error {
 	}
 	defer fu.Close()
 
-	// read file
 	ubytes, err := os.ReadFile(filePath)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 
-	// parse file data
 	if len(ubytes) != 0 {
 		return json.Unmarshal(ubytes, &Users)
 	}
@@ -62,24 +57,18 @@ func initUsers(filePath string) error {
 
 // initLocal reads or creates the local users data storage file. Then parse the content to local memory.
 func initLocal(filePath string) error {
-	// second - open vault file
-	//Objects := make(map[string]*model.LocalStorage)
-
 	// create/open file
 	fo, err := os.OpenFile(filePath, os.O_RDONLY|os.O_CREATE, 0777)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	defer fo.Close()
 
-	// read the whole file at once
-	vbytes, err := ioutil.ReadFile(filePath)
+	vbytes, err := os.ReadFile(filePath)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	// parse file data
 	if len(vbytes) != 0 {
 		return json.Unmarshal(vbytes, &Objects)
 	}
@@ -89,24 +78,20 @@ func initLocal(filePath string) error {
 
 // UpdateFiles rewrites local files with actual data.
 func UpdateFiles(userFilePath, objectFilePath string) error {
-	// prepare users data
 	usersJSONByte, err := json.Marshal(Users)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	if err = UpdateFile(userFilePath, usersJSONByte); err != nil {
 		return err
 	}
 
-	// prepare vault data
-	vaultJSONByte, err := json.Marshal(Objects)
+	objectsJSONByte, err := json.Marshal(Objects)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 
-	if err = UpdateFile(objectFilePath, vaultJSONByte); err != nil {
+	if err = UpdateFile(objectFilePath, objectsJSONByte); err != nil {
 		return err
 	}
 
@@ -115,5 +100,5 @@ func UpdateFiles(userFilePath, objectFilePath string) error {
 
 // UpdateFile method rewrite the file with the passed data.
 func UpdateFile(path string, data []byte) error {
-	return ioutil.WriteFile(path, data, 0644)
+	return os.WriteFile(path, data, 0644)
 }
