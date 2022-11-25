@@ -109,23 +109,48 @@ Usage: gophkeeperclient loginUser --login=<login> --password=<password>.`,
 		}
 
 		// after successful login - get JWT and send to server to synchronize data.
-		_ = metadata.AppendToOutgoingContext(context.Background(), "authorization", "Bearer "+response.GetJwt())
+		newCtx := metadata.AppendToOutgoingContext(context.Background(), "authorization", "Bearer "+response.GetJwt())
 
-		//syncResp, err := c.SyncVault(ctxWTKN, &syncData)
-		//if err != nil {
-		//	log.Println(`[ERROR]:`, err)
-		//	fmt.Println("request failed. please try again.")
-		//	return
-		//}
+		// send data to server and receive JWT in case of success. then save it in Users
+		dataDB, err := cliUser.GetAllUserDataFromDB(newCtx, &pb.GetAllUserDataFromDBRequest{})
+		if err != nil {
+			st, _ := status.FromError(err)
+			msg := fmt.Sprintf("request failed. statusCode: %v, message: %s", st.Code(), st.Message())
+			log.Error(msg, err)
+			return
+		}
+
+		fmt.Println("!!!")
+		for _, p := range dataDB.Passwords {
+			fmt.Printf("%s %s %s %d \n", p.GetLogin(), p.GetPassword(), p.GetMeta(), p.GetVersion())
+		}
+
+		for _, p := range storage.Objects[u.Username].Password {
+			info := fmt.Sprintf("!!!login: %s, password: %s, meta: %s, version: %d", p.Login, p.Password, p.Meta, p.Version)
+			fmt.Println(info)
+		}
+
+		// check for latest version data
+		lastVerData := storage.SyncData(storage.Objects[u.Username], model.ProtoToLocalStorage(dataDB))
 		//
-		//fmt.Println("Get latest data from server: ", syncResp.GetStatus())
-		//
-		//fmt.Print("Synchronizing: ")
-		//updVault := clserv.CombineVault(clstor.Local[u.Username], clserv.VaultSyncConvert(syncResp))
-		////save actual data
-		//clstor.Local[u.Username] = updVault
+		// save actual data
+		storage.Objects[u.Username] = lastVerData
+
+		err = storage.UpdateFiles(cfg.UsersStoragePath, cfg.ObjectsStoragePath)
+		if err != nil {
+			log.Error("failed to update local storage files", err)
+			return
+		}
+
+		log.Info("user data synchronized!")
+		for _, p := range storage.Objects[u.Username].Password {
+			info := fmt.Sprintf("login: %s, password: %s, meta: %s, version: %d", p.Login, p.Password, p.Meta, p.Version)
+			fmt.Println(info)
+		}
 
 		log.Info(fmt.Sprintf("user %s loged in!", loginUser.GetLogin()), "userID", response.GetUserID())
+		return
+
 	},
 }
 
