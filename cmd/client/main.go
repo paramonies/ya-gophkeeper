@@ -4,12 +4,14 @@ import (
 	"log"
 	"os"
 
+	client "github.com/paramonies/ya-gophkeeper/internal/client"
 	"github.com/paramonies/ya-gophkeeper/internal/client/cmd"
 	"github.com/paramonies/ya-gophkeeper/internal/client/config"
-	client "github.com/paramonies/ya-gophkeeper/internal/client/grpc"
 	"github.com/paramonies/ya-gophkeeper/internal/client/storage"
 	"github.com/paramonies/ya-gophkeeper/pkg/logger"
 )
+
+const errorExitCode int = 1
 
 func main() {
 	cfg, err := config.LoadConfig()
@@ -31,19 +33,17 @@ func main() {
 	}
 	l.Info("local storage initialized")
 
-	cliUser, err := client.DialUpUser(cfg.Server.GrpcServerPath)
+	clientSet, err := client.CreateClientSet(cfg.Server.GrpcServerPath)
 	if err != nil {
-		l.Fatal("failed to initiates a connection to user server", err)
+		l.Error("failed to initiate a connection to service", err)
+		os.Exit(errorExitCode)
 	}
+	defer client.ConnDown()
 
-	cliPass, err := client.DialUpPass(cfg.Server.GrpcServerPath)
+	err = cmd.Init(l, cfg, clientSet)
 	if err != nil {
-		l.Fatal("failed to initiates a connection to user server", err)
-	}
-
-	err = cmd.Init(l, cliUser, cliPass, cfg)
-	if err != nil {
-		l.Fatal("failed to init cobra commands")
+		l.Error("failed to init cobra commands", err)
+		os.Exit(errorExitCode)
 	}
 
 }

@@ -3,6 +3,8 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/paramonies/ya-gophkeeper/internal/client"
+
 	"github.com/spf13/cobra"
 
 	"github.com/paramonies/ya-gophkeeper/pkg/gen/api/gophkeeper/v1"
@@ -34,11 +36,11 @@ Type -help to see more.`,
 	},
 }
 
-func Init(l *logger.Logger, cu gophkeeper.UserServiceClient, cp gophkeeper.PasswordServiceClient, cf *config.Config) error {
+func Init(l *logger.Logger, cf *config.Config, cliSet *client.ClientSet) error {
 	log = l
 	cfg = cf
-	cliUser = cu
-	cliPass = cp
+	cliUser = cliSet.UserClient
+	cliPass = cliSet.PwdClient
 	err := rootCmd.Execute()
 	if err != nil {
 		return err
