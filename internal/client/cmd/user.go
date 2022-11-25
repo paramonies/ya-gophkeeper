@@ -10,9 +10,8 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
-	"github.com/paramonies/ya-gophkeeper/internal/model"
-
 	"github.com/paramonies/ya-gophkeeper/internal/client/storage"
+	"github.com/paramonies/ya-gophkeeper/internal/model"
 	pb "github.com/paramonies/ya-gophkeeper/pkg/gen/api/gophkeeper/v1"
 )
 
@@ -40,11 +39,9 @@ func init() {
 
 // registerUserCmd represents the registerUser command
 var registerUserCmd = &cobra.Command{
-	Use:   "registerUser",
-	Short: "Register new user in the service.",
-	Long: `
-This command register a new user.
-Usage: gophkeeperclient registerUser --login=<login> --password=<password>.`,
+	Use:   commands[RegisterUserCommand].Use,
+	Short: commands[RegisterUserCommand].Short,
+	Long:  commands[RegisterUserCommand].Long,
 	Run: func(cmd *cobra.Command, args []string) {
 		// get current user from os/user. Like this we can locally identify if the user changed.
 		u, err := user.Current()
@@ -73,11 +70,9 @@ Usage: gophkeeperclient registerUser --login=<login> --password=<password>.`,
 
 // loginUserCmd represents the loginUser command
 var loginUserCmd = &cobra.Command{
-	Use:   "loginUser",
-	Short: "Login user to the service",
-	Long: `
-This command login user.
-Usage: gophkeeperclient loginUser --login=<login> --password=<password>.`,
+	Use:   commands[LoginUserCommand].Use,
+	Short: commands[LoginUserCommand].Short,
+	Long:  commands[LoginUserCommand].Long,
 	Run: func(cmd *cobra.Command, args []string) {
 		// get current user from os/user. Like this we can locally identify if the user changed.
 		u, err := user.Current()
@@ -156,13 +151,9 @@ Usage: gophkeeperclient loginUser --login=<login> --password=<password>.`,
 
 // syncUserDataCmd represents the syncUserData command
 var syncUserDataCmd = &cobra.Command{
-	Use:   "syncUserData",
-	Short: "Synchronize local user data with the server database",
-	Long: `
-This command provides latest data from the server database.
-Then the database data, with version higher, that the local version, is saved to local storage.
-During the saving of local data to the database, in case of version conflict(database version is higher/newer), you will be alerted by a warning.
-Usage: gophkeeperclient syncUserData`,
+	Use:   commands[SyncDataCommand].Use,
+	Short: commands[SyncDataCommand].Short,
+	Long:  commands[SyncDataCommand].Long,
 	Run: func(cmd *cobra.Command, args []string) {
 		// get current user from os/user. Like this we can locally identify if the user changed.
 		u, err := user.Current()

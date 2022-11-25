@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os/user"
 	"time"
@@ -24,45 +25,37 @@ var (
 )
 
 func init() {
-	rootCmd.AddCommand(savePairCmd)
-	savePairCmd.Flags().StringVarP(&createPassword.Login, "login", "l", "", "Login to save.")
-	savePairCmd.Flags().StringVarP(&createPassword.Password, "password", "p", "", "Password to save.")
-	savePairCmd.Flags().StringVarP(&createPassword.Meta, "meta", "m", "", "Meta info for the saved password. Optional.")
-	savePairCmd.MarkFlagRequired("login")
-	savePairCmd.MarkFlagRequired("password")
+	rootCmd.AddCommand(createPasswordCmd)
+	createPasswordCmd.Flags().StringVarP(&createPassword.Login, "login", "l", "", "Login to save.")
+	createPasswordCmd.Flags().StringVarP(&createPassword.Password, "password", "p", "",
+		"Password to save.")
+	createPasswordCmd.Flags().StringVarP(&createPassword.Meta, "meta", "m", "",
+		"Meta info for the saved password. Optional.")
+	createPasswordCmd.MarkFlagRequired("login")
+	createPasswordCmd.MarkFlagRequired("password")
 
 	rootCmd.AddCommand(getPasswordCmd)
-	getPasswordCmd.Flags().StringVarP(&getPassword.Login, "login", "l", "", "Login for password to search for.")
+	getPasswordCmd.Flags().StringVarP(&getPassword.Login, "login", "l", "",
+		"Login for password to search for.")
 	getPasswordCmd.MarkFlagRequired("login")
 
 	rootCmd.AddCommand(deletePasswordCmd)
-	deletePasswordCmd.Flags().StringVarP(&deletePassword.Login, "login", "l", "", "Login for password to delete.")
+	deletePasswordCmd.Flags().StringVarP(&deletePassword.Login, "login", "l", "",
+		"Login for password to delete.")
 	deletePasswordCmd.MarkFlagRequired("login")
 }
 
 // savePairCmd represents the savePair command
-var savePairCmd = &cobra.Command{
-	Use:   "createPassword",
-	Short: "Create a new Password of login&password",
-	Long: `
-This command allows to the authenticated user to save new password data.
-Usage: gophkeeperclient createPassword --login=<login_to_save> --password=<password_to_save> --meta=<meta_info_for_saved_login&password>.`,
+var createPasswordCmd = &cobra.Command{
+	Use:   commands[CreatePasswordCommand].Use,
+	Short: commands[CreatePasswordCommand].Short,
+	Long:  commands[CreatePasswordCommand].Long,
 	Run: func(cmd *cobra.Command, args []string) {
-		// get current user from os/user. Like this we can locally identify if the user changed.
-		u, err := user.Current()
+		_, store, jwt, err := getUserInfo()
 		if err != nil {
-			log.Fatal("failed to get current linux user", err)
+			log.Fatal(err)
 		}
 
-		jwt, ok := storage.Users[u.Username]
-		if !ok {
-			log.Fatal("user not authenticated", err)
-		}
-
-		store, ok := storage.Objects[u.Username]
-		if !ok {
-			log.Fatal("user not found. Please register", nil)
-		}
 		password, ok := store.Password[createPassword.Login]
 		if ok {
 			createPassword.Version = password.Version + 1
@@ -73,7 +66,7 @@ Usage: gophkeeperclient createPassword --login=<login_to_save> --password=<passw
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 		defer cancel()
 
-		newCtx := metadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+jwt)
+		newCtx := metadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+*jwt)
 
 		res, err := cliPass.CreatePassword(newCtx, &createPassword)
 		if err != nil {
@@ -101,26 +94,13 @@ Usage: gophkeeperclient createPassword --login=<login_to_save> --password=<passw
 
 // getPasswordCmd represents the getPassword command
 var getPasswordCmd = &cobra.Command{
-	Use:   "getPassword",
-	Short: "Get a password data by login",
-	Long: `
-This command returns to the authenticated user the password data requested by login.
-Usage: gophkeeperclient getPassword --login=<login>.`,
+	Use:   commands[GetPasswordCommand].Use,
+	Short: commands[GetPasswordCommand].Short,
+	Long:  commands[GetPasswordCommand].Long,
 	Run: func(cmd *cobra.Command, args []string) {
-		// get current user from os/user. Like this we can locally identify if the user changed.
-		u, err := user.Current()
+		_, store, jwt, err := getUserInfo()
 		if err != nil {
-			log.Fatal("failed to get current linux user", err)
-		}
-
-		jwt, ok := storage.Users[u.Username]
-		if !ok {
-			log.Fatal("user not authenticated", err)
-		}
-
-		store, ok := storage.Objects[u.Username]
-		if !ok {
-			log.Fatal("user not found. Please register", nil)
+			log.Fatal(err)
 		}
 
 		pwd, ok := store.Password[getPassword.Login]
@@ -136,7 +116,7 @@ Usage: gophkeeperclient getPassword --login=<login>.`,
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 		defer cancel()
 
-		newCtx := metadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+jwt)
+		newCtx := metadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+*jwt)
 
 		// send data to server and receive JWT in case of success. then save it in Users
 		res, err := cliPass.GetPassword(newCtx, &pb.GetPasswordRequest{
@@ -171,29 +151,16 @@ Usage: gophkeeperclient getPassword --login=<login>.`,
 
 // deletePasswordCmd represents the deletePassword command
 var deletePasswordCmd = &cobra.Command{
-	Use:   "deletePassword",
-	Short: "Delete the password data for login",
-	Long: `
-This command allows to the authenticated user to delete the password data.
-Usage: gophkeeperclient deletePassword --login=<login>.`,
+	Use:   commands[DeletePasswordCommand].Use,
+	Short: commands[DeletePasswordCommand].Short,
+	Long:  commands[DeletePasswordCommand].Long,
 	Run: func(cmd *cobra.Command, args []string) {
-		// get current user from os/user. Like this we can locally identify if the user changed.
-		u, err := user.Current()
+		u, store, jwt, err := getUserInfo()
 		if err != nil {
-			log.Fatal("failed to get current linux user", err)
+			log.Fatal(err)
 		}
 
-		jwt, ok := storage.Users[u.Username]
-		if !ok {
-			log.Fatal("user not authenticated", err)
-		}
-
-		store, ok := storage.Objects[u.Username]
-		if !ok {
-			log.Fatal("user not found. Please register", nil)
-		}
-
-		_, ok = store.Password[deletePassword.Login]
+		_, ok := store.Password[deletePassword.Login]
 		// local version doesn't exist: nothing to delete
 		if !ok {
 			msg := fmt.Sprintf("Nothing found for login: %s.Make sure you have the latest version by synchronizing your local storage.",
@@ -206,7 +173,7 @@ Usage: gophkeeperclient deletePassword --login=<login>.`,
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 		defer cancel()
 
-		newCtx := metadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+jwt)
+		newCtx := metadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+*jwt)
 
 		// send data to server and receive JWT in case of success. then save it in Users
 		_, err = cliPass.DeletePassword(newCtx, &pb.DeletePasswordRequest{
@@ -233,4 +200,22 @@ Usage: gophkeeperclient deletePassword --login=<login>.`,
 		log.Info(msg)
 		return
 	},
+}
+
+func getUserInfo() (*user.User, *model.LocalStorage, *string, error) {
+	u, err := user.Current()
+	if err != nil {
+		return nil, nil, nil, fmt.Errorf("failed to get current linux user: %w", err)
+	}
+
+	jwt, ok := storage.Users[u.Username]
+	if !ok {
+		return nil, nil, nil, errors.New("user not authenticated")
+	}
+
+	storage, ok := storage.Objects[u.Username]
+	if !ok {
+		return nil, nil, nil, errors.New("user not found. Please register")
+	}
+	return u, storage, &jwt, nil
 }
