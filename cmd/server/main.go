@@ -4,9 +4,9 @@ import (
 	"context"
 	"log"
 	"os"
-	"os/signal"
-	"syscall"
 	"time"
+
+	"github.com/paramonies/ya-gophkeeper/pkg/graceful"
 
 	"github.com/jackc/pgx/v4/pgxpool"
 
@@ -15,6 +15,8 @@ import (
 	"github.com/paramonies/ya-gophkeeper/internal/store"
 	"github.com/paramonies/ya-gophkeeper/pkg/logger"
 )
+
+const errorExitCode int = 1
 
 func main() {
 	cfg, err := config.LoadConfig()
@@ -28,40 +30,21 @@ func main() {
 	dbConn := store.NewPgxConnector(dbPool, time.Duration(cfg.DB.QueryTimeout)*time.Second)
 
 	// init the grpc server
-	server, err := server.InitGRPCServer(dbConn, l)
+	err = server.RunGRPCServer(cfg.Server.Address, dbConn, l)
 	if err != nil {
-		log.Fatal(err)
+		l.Error(context.Background(), "failed to run API server", err)
+		os.Exit(errorExitCode)
 	}
 
-	// init storage
-	//if err = storage.Init(); err != nil {
-	//	log.Fatal(err)
-	//}
+	graceful.AddCallback(func() error {
+		l.Warn("Shutting down application...")
+		return nil
+	})
 
-	gracefulShutdownChan := make(chan struct{})
-	sigint := make(chan os.Signal, 1)
-	signal.Notify(sigint, syscall.SIGTERM, syscall.SIGINT, syscall.SIGQUIT)
-
-	go func() {
-		<-sigint
-		l.Info("server gracefully shutdown: start")
-		if err = server.ShutDown(); err != nil {
-			l.Info("gRPC server shutdown err: %v", err)
-		}
-		close(gracefulShutdownChan)
-	}()
-
-	if err = server.Start(cfg.Server.Address); err != nil {
-		log.Fatal(err)
+	err = graceful.WaitShutdown()
+	if err != nil {
+		l.Error(context.Background(), "shutdown error", err)
 	}
-
-	<-gracefulShutdownChan
-
-	//if err = storage.Close(); err != nil {
-	//	log.Fatal(err)
-	//}
-
-	l.Info("server gracefully shutdown: done")
 }
 
 func initDatabaseConnection(dns string, dbConnectTimeout time.Duration, l *logger.Logger) (*pgxpool.Pool, error) {
@@ -73,6 +56,11 @@ func initDatabaseConnection(dns string, dbConnectTimeout time.Duration, l *logge
 	if err != nil {
 		return nil, err
 	}
+
+	graceful.AddCallback(func() error {
+		pool.Close()
+		return nil
+	})
 
 	return pool, nil
 }
