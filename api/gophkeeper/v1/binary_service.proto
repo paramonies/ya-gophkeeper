@@ -1,0 +1,43 @@
+syntax="proto3";
+
+package proto;
+option go_package = "github.com/paramonies/ya-gophkeeper/pkg/gen/gophkeeper/v1;gophkeeper";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service BinaryService {
+  rpc CreateBinary(CreateBinaryRequest) returns (CreateBinaryResponse);
+  rpc GetBinary(GetBinaryRequest) returns (GetBinaryResponse);
+  rpc DeleteBinary(DeleteBinaryRequest) returns (DeleteBinaryResponse);
+}
+
+message CreateBinaryRequest{
+  string title = 1;
+  string data = 2;
+  string meta = 3;
+  uint32 version = 4;
+}
+
+message CreateBinaryResponse{
+  string status = 1;
+}
+
+message GetBinaryRequest {
+  string title = 1;
+}
+
+message GetBinaryResponse {
+  string title = 1;
+  string data = 2;
+  string meta = 3;
+  uint32 version = 4;
+}
+
+message DeleteBinaryRequest {
+  string title = 1;
+}
+
+message DeleteBinaryResponse {
+  string status = 1;
+}

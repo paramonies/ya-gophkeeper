@@ -1,0 +1,43 @@
+syntax="proto3";
+
+package proto;
+option go_package = "github.com/paramonies/ya-gophkeeper/pkg/gen/gophkeeper/v1;gophkeeper";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service TextService {
+  rpc CreateText(CreateTextRequest) returns (CreateTextResponse);
+  rpc GetText(GetTextRequest) returns (GetTextResponse);
+  rpc DeleteText(DeleteTextRequest) returns (DeleteTextResponse);
+}
+
+message CreateTextRequest{
+  string title = 1;
+  string data = 2;
+  string meta = 3;
+  uint32 version = 4;
+}
+
+message CreateTextResponse{
+  string status = 1;
+}
+
+message GetTextRequest {
+  string title = 1;
+}
+
+message GetTextResponse {
+  string title = 1;
+  string data = 2;
+  string meta = 3;
+  uint32 version = 4;
+}
+
+message DeleteTextRequest {
+  string title = 1;
+}
+
+message DeleteTextResponse {
+  string status = 1;
+}
