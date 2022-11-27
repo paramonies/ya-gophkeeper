@@ -36,7 +36,7 @@ func (h *BinaryHandler) CreateBinary(ctx context.Context, req *pb.CreateBinaryRe
 
 	userID := utils.GetUserIDFromCTX(ctx)
 
-	res, err := h.storage.Binaries().GetByLogin(ctx, &dto.GetBinaryByTitleRequest{
+	res, err := h.storage.Binaries().GetByTitle(ctx, &dto.GetBinaryByTitleRequest{
 		Title:  req.GetTitle(),
 		UserID: *userID,
 	})
@@ -95,7 +95,7 @@ func (h *BinaryHandler) GetBinary(ctx context.Context, req *pb.GetBinaryRequest)
 
 	userID := utils.GetUserIDFromCTX(ctx)
 
-	res, err := h.storage.Binaries().GetByLogin(ctx, &dto.GetBinaryByTitleRequest{
+	res, err := h.storage.Binaries().GetByTitle(ctx, &dto.GetBinaryByTitleRequest{
 		Title:  req.GetTitle(),
 		UserID: *userID,
 	})

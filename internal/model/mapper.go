@@ -7,7 +7,9 @@ import (
 func ProtoToLocalStorage(in *pb.GetAllUserDataFromDBResponse) *LocalStorage {
 	return &LocalStorage{
 		Password: createPasswordMap(in.Passwords),
-		// todo: make for other entities
+		Text:     createTextMap(in.Texts),
+		Binary:   createBinaryMap(in.Binaries),
+		Card:     createCardMap(in.Cards),
 	}
 }
 
@@ -26,4 +28,49 @@ func createPasswordMap(pwds []*pb.Password) map[string]*Password {
 	return out
 }
 
-// todo: createMap make for other entities
+func createTextMap(texts []*pb.Text) map[string]*Text {
+	out := make(map[string]*Text)
+
+	for _, t := range texts {
+		out[t.GetTitle()] = &Text{
+			Title:   t.GetTitle(),
+			Data:    t.GetData(),
+			Meta:    t.GetMeta(),
+			Version: t.GetVersion(),
+		}
+	}
+
+	return out
+}
+
+func createBinaryMap(bins []*pb.Binary) map[string]*Binary {
+	out := make(map[string]*Binary)
+
+	for _, b := range bins {
+		out[b.GetTitle()] = &Binary{
+			Title:   b.GetTitle(),
+			Data:    b.GetData(),
+			Meta:    b.GetMeta(),
+			Version: b.GetVersion(),
+		}
+	}
+
+	return out
+}
+
+func createCardMap(cards []*pb.Card) map[string]*Card {
+	out := make(map[string]*Card)
+
+	for _, c := range cards {
+		out[c.GetNumber()] = &Card{
+			Number:  c.GetNumber(),
+			Owner:   c.GetOwner(),
+			ExpDate: c.GetExpDate(),
+			Cvv:     c.GetCvv(),
+			Meta:    c.GetMeta(),
+			Version: c.GetVersion(),
+		}
+	}
+
+	return out
+}

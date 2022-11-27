@@ -57,7 +57,7 @@ func (h *UserHandler) RegisterUser(ctx context.Context, req *pb.RegisterUserRequ
 	}, nil
 }
 
-// RegisterUser handler creates new user
+// LoginUser handler creates new user
 func (h *UserHandler) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.LoginUserResponse, error) {
 	h.log.Info("LoginUser handler")
 	if req.GetLogin() == "" || req.GetPassword() == "" {
@@ -103,11 +103,6 @@ func (h *UserHandler) GetAllUserDataFromDB(ctx context.Context, req *pb.GetAllUs
 		return nil, err
 	}
 
-	//pwd := pwdData.Passwords
-	//for _, p := range pwd {
-	//	fmt.Printf("%s %s %s %d \n", p.Login, p.Password, p.Meta, p.Version)
-	//}
-
 	textData, err := h.storage.Texts().GetAll(ctx, &dto.GetTextAllRequest{
 		UserID: *userID,
 	})
@@ -122,10 +117,17 @@ func (h *UserHandler) GetAllUserDataFromDB(ctx context.Context, req *pb.GetAllUs
 		return nil, err
 	}
 
+	cardData, err := h.storage.Cards().GetAll(ctx, &dto.GetCardAllRequest{
+		UserID: *userID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.GetAllUserDataFromDBResponse{
 		Passwords: PasswordModelsToProto(pwdData.Passwords),
 		Texts:     TextModelsToProto(textData.Texts),
 		Binaries:  BinaryModelsToProto(binaryData.Binaries),
-		Cards:     nil,
+		Cards:     CardModelsToProto(cardData.Cards),
 	}, nil
 }

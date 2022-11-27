@@ -18,6 +18,7 @@ var (
 	cliPass gophkeeper.PasswordServiceClient
 	cliText gophkeeper.TextServiceClient
 	cliBin  gophkeeper.BinaryServiceClient
+	cliCard gophkeeper.CardServiceClient
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -38,6 +39,7 @@ func Init(l *logger.Logger, cf *config.Config, cliSet *client.ClientSet) error {
 	cliPass = cliSet.PwdClient
 	cliText = cliSet.TextClient
 	cliBin = cliSet.BinClient
+	cliCard = cliSet.CardClient
 
 	err := rootCmd.Execute()
 	if err != nil {

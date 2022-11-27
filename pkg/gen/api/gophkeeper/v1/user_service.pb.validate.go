@@ -1139,6 +1139,18 @@ func (m *Card) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Number
+
+	// no validation rules for Owner
+
+	// no validation rules for ExpDate
+
+	// no validation rules for Cvv
+
+	// no validation rules for Meta
+
+	// no validation rules for Version
+
 	if len(errors) > 0 {
 		return CardMultiError(errors)
 	}

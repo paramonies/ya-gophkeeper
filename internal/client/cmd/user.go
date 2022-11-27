@@ -116,14 +116,8 @@ var loginUserCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Println("!!!")
 		for _, p := range dataDB.Passwords {
 			fmt.Printf("%s %s %s %d \n", p.GetLogin(), p.GetPassword(), p.GetMeta(), p.GetVersion())
-		}
-
-		for _, p := range storage.Objects[u.Username].Password {
-			info := fmt.Sprintf("!!!login: %s, password: %s, meta: %s, version: %d", p.Login, p.Password, p.Meta, p.Version)
-			fmt.Println(info)
 		}
 
 		// check for latest version data
@@ -182,14 +176,8 @@ var syncUserDataCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Println("!!!")
 		for _, p := range dataDB.Passwords {
 			fmt.Printf("%s %s %s %d \n", p.GetLogin(), p.GetPassword(), p.GetMeta(), p.GetVersion())
-		}
-
-		for _, p := range storage.Objects[u.Username].Password {
-			info := fmt.Sprintf("!!!login: %s, password: %s, meta: %s, version: %d", p.Login, p.Password, p.Meta, p.Version)
-			fmt.Println(info)
 		}
 
 		// check for latest version data

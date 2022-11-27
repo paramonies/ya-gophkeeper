@@ -112,6 +112,23 @@ func (e *BinaryNotFoundError) Unwrap() error {
 	return &e.ResourceNotFoundError
 }
 
+type CardNotFoundError struct {
+	ResourceNotFoundError
+}
+
+func NewCardNotFoundError(number string) error {
+	return &CardNotFoundError{
+		ResourceNotFoundError{
+			Kind: "card",
+			ID:   number,
+		},
+	}
+}
+
+func (e *CardNotFoundError) Unwrap() error {
+	return &e.ResourceNotFoundError
+}
+
 // IsNotFound returns true if the err's chain contains ResourceNotFound error.
 // Otherwise, it returns false.
 func IsNotFound(err error) bool {

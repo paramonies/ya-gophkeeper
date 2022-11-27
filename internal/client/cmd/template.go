@@ -20,6 +20,10 @@ const (
 	CreateBinaryCommand Command = "CREATE_BINARY"
 	GetBinaryCommand    Command = "GET_BINARY"
 	DeleteBinaryCommand Command = "DELETE_BINARY"
+
+	CreateCardCommand Command = "CREATE_CARD"
+	GetCardCommand    Command = "GET_CARD"
+	DeleteCardCommand Command = "DELETE_CARD"
 )
 
 var commands = map[Command]struct {
@@ -109,5 +113,25 @@ var commands = map[Command]struct {
 		Short: "Delete binary entity for title",
 		Long: "This command allows authenticated user to delete the binary data for title.\n" +
 			"Usage: gophkeeperclient deleteBinary --title=<title>",
+	},
+
+	CreateCardCommand: {
+		Use:   "createCard",
+		Short: "Create a new card entity for uniq number",
+		Long: "This command allows authenticated user to save new card data.\n" +
+			"Usage: gophkeeperclient createCard --number=<number> --owner=<owner> --exp_date=<exp_date> " +
+			"--cvv=<cvv> --meta=<meta_info>",
+	},
+	GetCardCommand: {
+		Use:   "getCard",
+		Short: "Get card entity for number",
+		Long: "This command returns card data for requested number and authenticated user.\n" +
+			"Usage: gophkeeperclient getCard --number= <number>",
+	},
+	DeleteCardCommand: {
+		Use:   "deleteCard",
+		Short: "Delete card entity for number",
+		Long: "This command allows authenticated user to delete the card data with number.\n" +
+			"Usage: gophkeeperclient deleteCard --number= <number>",
 	},
 }

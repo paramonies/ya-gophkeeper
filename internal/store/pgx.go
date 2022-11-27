@@ -13,6 +13,7 @@ type pgxConnector struct {
 	passwordRepo *pgx.PasswordRepo
 	textRepo     *pgx.TextRepo
 	binaryRepo   *pgx.BinaryRepo
+	cardRepo     *pgx.CardRepo
 }
 
 func NewPgxConnector(p *pgxpool.Pool, queryTimeout time.Duration) Connector {
@@ -21,6 +22,7 @@ func NewPgxConnector(p *pgxpool.Pool, queryTimeout time.Duration) Connector {
 		passwordRepo: pgx.NewPasswordRepo(p, queryTimeout),
 		textRepo:     pgx.NewTextRepo(p, queryTimeout),
 		binaryRepo:   pgx.NewBinaryRepo(p, queryTimeout),
+		cardRepo:     pgx.NewCardRepo(p, queryTimeout),
 	}
 }
 
@@ -38,4 +40,8 @@ func (c *pgxConnector) Texts() TextRepo {
 
 func (c *pgxConnector) Binaries() BinaryRepo {
 	return c.binaryRepo
+}
+
+func (c *pgxConnector) Cards() CardRepo {
+	return c.cardRepo
 }

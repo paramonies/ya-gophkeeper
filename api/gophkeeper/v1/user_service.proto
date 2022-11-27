@@ -65,5 +65,10 @@ message Binary {
 }
 
 message Card {
-
+  string number = 1;
+  string owner = 2;
+  string exp_date = 3;
+  string cvv =4;
+  string meta = 5;
+  uint32 version = 6;
 }

@@ -61,7 +61,7 @@ RETURNING id
 	}, nil
 }
 
-func (r *BinaryRepo) GetByLogin(ctx context.Context, req *dto.GetBinaryByTitleRequest) (*dto.GetBinaryByTitleResponse, error) {
+func (r *BinaryRepo) GetByTitle(ctx context.Context, req *dto.GetBinaryByTitleRequest) (*dto.GetBinaryByTitleResponse, error) {
 	query := `
 SELECT title, data, meta, version FROM binaries
 WHERE title=$1 AND user_id=$2 AND deleted_at isnull ORDER BY version DESC LIMIT 1

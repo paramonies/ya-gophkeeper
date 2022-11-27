@@ -11,6 +11,7 @@ type Connector interface {
 	Passwords() PasswordRepo
 	Texts() TextRepo
 	Binaries() BinaryRepo
+	Cards() CardRepo
 }
 
 type UserRepo interface {
@@ -27,14 +28,21 @@ type PasswordRepo interface {
 
 type TextRepo interface {
 	Create(ctx context.Context, req *dto.CreateTextRequest) (*dto.CreateTextResponse, error)
-	GetByLogin(ctx context.Context, req *dto.GetTextByTitleRequest) (*dto.GetTextByTitleResponse, error)
+	GetByTitle(ctx context.Context, req *dto.GetTextByTitleRequest) (*dto.GetTextByTitleResponse, error)
 	GetAll(ctx context.Context, req *dto.GetTextAllRequest) (*dto.GetTextAllResponse, error)
 	Delete(ctx context.Context, req *dto.DeleteTextRequest) error
 }
 
 type BinaryRepo interface {
 	Create(ctx context.Context, req *dto.CreateBinaryRequest) (*dto.CreateBinaryResponse, error)
-	GetByLogin(ctx context.Context, req *dto.GetBinaryByTitleRequest) (*dto.GetBinaryByTitleResponse, error)
+	GetByTitle(ctx context.Context, req *dto.GetBinaryByTitleRequest) (*dto.GetBinaryByTitleResponse, error)
 	GetAll(ctx context.Context, req *dto.GetBinaryAllRequest) (*dto.GetBinaryAllResponse, error)
 	Delete(ctx context.Context, req *dto.DeleteBinaryRequest) error
+}
+
+type CardRepo interface {
+	Create(ctx context.Context, req *dto.CreateCardRequest) (*dto.CreateCardResponse, error)
+	GetByNumber(ctx context.Context, req *dto.GetCardByNumberRequest) (*dto.GetCardByNumberResponse, error)
+	GetAll(ctx context.Context, req *dto.GetCardAllRequest) (*dto.GetCardAllResponse, error)
+	Delete(ctx context.Context, req *dto.DeleteCardRequest) error
 }

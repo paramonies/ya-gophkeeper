@@ -28,6 +28,11 @@ type Binary struct {
 }
 
 type Card struct {
+	Number  string `json:"number"`
+	Owner   string `json:"owner"`
+	ExpDate string `json:"expiration_date"`
+	Cvv     string `json:"cvv"`
+	Meta    string `json:"meta"`
 	Version uint32 `json:"version"`
 }
 

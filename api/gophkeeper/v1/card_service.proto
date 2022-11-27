@@ -1,0 +1,47 @@
+syntax="proto3";
+
+package proto;
+option go_package = "github.com/paramonies/ya-gophkeeper/pkg/gen/gophkeeper/v1;gophkeeper";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service CardService {
+  rpc CreateCard(CreateCardRequest) returns (CreateCardResponse);
+  rpc GetCard(GetCardRequest) returns (GetCardResponse);
+  rpc DeleteCard(DeleteCardRequest) returns (DeleteCardResponse);
+}
+
+message CreateCardRequest{
+  string number = 1;
+  string owner = 2;
+  string exp_date = 3;
+  string cvv =4;
+  string meta = 5;
+  uint32 version = 6;
+}
+
+message CreateCardResponse{
+  string status = 1;
+}
+
+message GetCardRequest {
+  string number = 1;
+}
+
+message GetCardResponse {
+  string number = 1;
+  string owner = 2;
+  string exp_date = 3;
+  string cvv =4;
+  string meta = 5;
+  uint32 version = 6;
+}
+
+message DeleteCardRequest {
+  string number = 1;
+}
+
+message DeleteCardResponse {
+  string status = 1;
+}

@@ -14,6 +14,7 @@ type ClientSet struct {
 	PwdClient  pb.PasswordServiceClient
 	TextClient pb.TextServiceClient
 	BinClient  pb.BinaryServiceClient
+	CardClient pb.CardServiceClient
 }
 
 func CreateClientSet(serverPath string) (*ClientSet, error) {
@@ -29,6 +30,7 @@ func CreateClientSet(serverPath string) (*ClientSet, error) {
 		PwdClient:  pb.NewPasswordServiceClient(conn),
 		TextClient: pb.NewTextServiceClient(conn),
 		BinClient:  pb.NewBinaryServiceClient(conn),
+		CardClient: pb.NewCardServiceClient(conn),
 	}, nil
 }
 

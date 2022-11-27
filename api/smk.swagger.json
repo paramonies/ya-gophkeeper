@@ -9,6 +9,9 @@
       "name": "BinaryService"
     },
     {
+      "name": "CardService"
+    },
+    {
       "name": "PasswordService"
     },
     {
@@ -45,9 +48,38 @@
       }
     },
     "protoCard": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "expDate": {
+          "type": "string"
+        },
+        "cvv": {
+          "type": "string"
+        },
+        "meta": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
     },
     "protoCreateBinaryResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "protoCreateCardResponse": {
       "type": "object",
       "properties": {
         "status": {
@@ -72,6 +104,14 @@
       }
     },
     "protoDeleteBinaryResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "protoDeleteCardResponse": {
       "type": "object",
       "properties": {
         "status": {
@@ -131,6 +171,30 @@
           "type": "string"
         },
         "data": {
+          "type": "string"
+        },
+        "meta": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "protoGetCardResponse": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "expDate": {
+          "type": "string"
+        },
+        "cvv": {
           "type": "string"
         },
         "meta": {

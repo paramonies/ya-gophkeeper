@@ -61,7 +61,7 @@ RETURNING id
 	}, nil
 }
 
-func (r *TextRepo) GetByLogin(ctx context.Context, req *dto.GetTextByTitleRequest) (*dto.GetTextByTitleResponse, error) {
+func (r *TextRepo) GetByTitle(ctx context.Context, req *dto.GetTextByTitleRequest) (*dto.GetTextByTitleResponse, error) {
 	query := `
 SELECT title, data, meta, version FROM texts
 WHERE title=$1 AND user_id=$2 AND deleted_at isnull ORDER BY version DESC LIMIT 1

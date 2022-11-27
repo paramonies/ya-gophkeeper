@@ -56,3 +56,21 @@ func BinaryModelsToProto(binaries []*model.Binary) []*pb.Binary {
 	}
 	return res
 }
+
+func CardModelsToProto(cards []*model.Card) []*pb.Card {
+	res := make([]*pb.Card, len(cards))
+
+	for _, card := range cards {
+		c := &pb.Card{
+			Number:  card.Number,
+			Owner:   card.Owner,
+			ExpDate: card.ExpDate,
+			Cvv:     card.Cvv,
+			Meta:    card.Meta,
+			Version: card.Version,
+		}
+
+		res = append(res, c)
+	}
+	return res
+}

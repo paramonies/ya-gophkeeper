@@ -29,7 +29,6 @@ func main() {
 	dbPool, err := initDatabaseConnection(cfg.DB.DNS, time.Duration(cfg.DB.ConnectTimeout)*time.Second, l)
 	dbConn := store.NewPgxConnector(dbPool, time.Duration(cfg.DB.QueryTimeout)*time.Second)
 
-	// init the grpc server
 	err = server.RunGRPCServer(cfg.Server.Address, dbConn, l)
 	if err != nil {
 		l.Error(context.Background(), "failed to run API server", err)

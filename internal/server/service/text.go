@@ -36,7 +36,7 @@ func (h *TextHandler) CreateText(ctx context.Context, req *pb.CreateTextRequest)
 
 	userID := utils.GetUserIDFromCTX(ctx)
 
-	res, err := h.storage.Texts().GetByLogin(ctx, &dto.GetTextByTitleRequest{
+	res, err := h.storage.Texts().GetByTitle(ctx, &dto.GetTextByTitleRequest{
 		Title:  req.GetTitle(),
 		UserID: *userID,
 	})
@@ -95,7 +95,7 @@ func (h *TextHandler) GetText(ctx context.Context, req *pb.GetTextRequest) (*pb.
 
 	userID := utils.GetUserIDFromCTX(ctx)
 
-	res, err := h.storage.Texts().GetByLogin(ctx, &dto.GetTextByTitleRequest{
+	res, err := h.storage.Texts().GetByTitle(ctx, &dto.GetTextByTitleRequest{
 		Title:  req.GetTitle(),
 		UserID: *userID,
 	})
