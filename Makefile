@@ -27,14 +27,6 @@ bootstrap-deps:
         google.golang.org/grpc/cmd/protoc-gen-go-grpc \
         github.com/envoyproxy/protoc-gen-validate
 
-.PHONY: proto-test
-proto-test:
-	protoc --go_out=. \
-	--go_opt=paths=source_relative \
-	--go-grpc_out=. \
-	--go-grpc_opt=paths=source_relative \
-	./api/gophkeeper/v1/gophkeeper_service.proto
-
 .PHONY: fmt
 fmt:
 	goimports -local "github.com/paramonies/ya-gophkeeper" -w cmd internal pkg/logger

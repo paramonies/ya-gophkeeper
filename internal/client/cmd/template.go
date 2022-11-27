@@ -12,6 +12,14 @@ const (
 	CreatePasswordCommand Command = "CREATE_PASSWORD"
 	GetPasswordCommand    Command = "GET_PASSWORD"
 	DeletePasswordCommand Command = "DELETE_PASSWORD"
+
+	CreateTextCommand Command = "CREATE_TEXT"
+	GetTextCommand    Command = "GET_TEXT"
+	DeleteTextCommand Command = "DELETE_TEXT"
+
+	CreateBinaryCommand Command = "CREATE_BINARY"
+	GetBinaryCommand    Command = "GET_BINARY"
+	DeleteBinaryCommand Command = "DELETE_BINARY"
 )
 
 var commands = map[Command]struct {
@@ -49,7 +57,7 @@ var commands = map[Command]struct {
 	CreatePasswordCommand: {
 		Use:   "createPassword",
 		Short: "Create a new password entity for uniq login",
-		Long: "This command allows to the authenticated user to save new password data.\n" +
+		Long: "This command allows authenticated user to save new password data.\n" +
 			"Usage: gophkeeperclient createPassword --login=<login> --password=<password> --meta=<meta_info>",
 	},
 	GetPasswordCommand: {
@@ -60,8 +68,46 @@ var commands = map[Command]struct {
 	},
 	DeletePasswordCommand: {
 		Use:   "deletePassword",
-		Short: "Delete the password entity for login",
-		Long: "This command allows to the authenticated user to delete the password data for login.\n" +
+		Short: "Delete password entity for login",
+		Long: "This command allows authenticated user to delete the password data for login.\n" +
 			"Usage: gophkeeperclient deletePassword --login=<login>",
+	},
+
+	CreateTextCommand: {
+		Use:   "createText",
+		Short: "Create a new text entity for uniq title",
+		Long: "This command allows authenticated user to save new text data.\n" +
+			"Usage: gophkeeperclient createText --title=<title> --data=<data> --meta=<meta_info>",
+	},
+	GetTextCommand: {
+		Use:   "getText",
+		Short: "Get text entity for title",
+		Long: "This command returns text data for requested title and authenticated user.\n" +
+			"Usage: gophkeeperclient getText --title=<title>",
+	},
+	DeleteTextCommand: {
+		Use:   "deleteText",
+		Short: "Delete text entity for title",
+		Long: "This command allows authenticated user to delete the text data for title.\n" +
+			"Usage: gophkeeperclient deleteText --title=<title>",
+	},
+
+	CreateBinaryCommand: {
+		Use:   "createBinary",
+		Short: "Create a new binary entity for uniq title",
+		Long: "This command allows authenticated user to save new binary data.\n" +
+			"Usage: gophkeeperclient createBinary --title=<title> --data=<data> --meta=<meta_info>",
+	},
+	GetBinaryCommand: {
+		Use:   "getBinary",
+		Short: "Get binary entity for title",
+		Long: "This command returns binary data for requested title and authenticated user.\n" +
+			"Usage: gophkeeperclient getBinary --title=<title>",
+	},
+	DeleteBinaryCommand: {
+		Use:   "deleteBinary",
+		Short: "Delete binary entity for title",
+		Long: "This command allows authenticated user to delete the binary data for title.\n" +
+			"Usage: gophkeeperclient deleteBinary --title=<title>",
 	},
 }

@@ -2,14 +2,11 @@ package cmd
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"os/user"
 	"time"
 
-	"google.golang.org/grpc/status"
-
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 
 	"github.com/paramonies/ya-gophkeeper/internal/client/storage"
 	"github.com/paramonies/ya-gophkeeper/internal/model"
@@ -70,7 +67,8 @@ var createPasswordCmd = &cobra.Command{
 
 		res, err := cliPass.CreatePassword(newCtx, &createPassword)
 		if err != nil {
-			log.Error("failed to created password", err)
+			st, _ := status.FromError(err)
+			log.Error("failed to created password", err, "code", st.Code(), "message", st.Message())
 			return
 		}
 
@@ -200,22 +198,4 @@ var deletePasswordCmd = &cobra.Command{
 		log.Info(msg)
 		return
 	},
-}
-
-func getUserInfo() (*user.User, *model.LocalStorage, *string, error) {
-	u, err := user.Current()
-	if err != nil {
-		return nil, nil, nil, fmt.Errorf("failed to get current linux user: %w", err)
-	}
-
-	jwt, ok := storage.Users[u.Username]
-	if !ok {
-		return nil, nil, nil, errors.New("user not authenticated")
-	}
-
-	storage, ok := storage.Objects[u.Username]
-	if !ok {
-		return nil, nil, nil, errors.New("user not found. Please register")
-	}
-	return u, storage, &jwt, nil
 }

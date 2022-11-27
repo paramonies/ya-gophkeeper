@@ -15,10 +15,6 @@ import (
 	"github.com/paramonies/ya-gophkeeper/pkg/logger"
 )
 
-var (
-	newerVersionDetected = "newer version found in database. please synchronize you app to get the most actual data."
-)
-
 type PasswordHandler struct {
 	pb.UnimplementedPasswordServiceServer
 	storage store.Connector
@@ -33,24 +29,25 @@ func NewPasswordHandler(s store.Connector, l *logger.Logger) *PasswordHandler {
 }
 
 func (h *PasswordHandler) CreatePassword(ctx context.Context, req *pb.CreatePasswordRequest) (*pb.CreatePasswordResponse, error) {
-	h.log.Info("CreatePassword handler")
+	h.log.Debug("CreatePassword handler")
 	if req.GetVersion() < 1 || req.GetLogin() == "" || req.GetPassword() == "" {
 		return nil, status.Error(codes.InvalidArgument, "invalid arguments")
 	}
 
 	userID := utils.GetUserIDFromCTX(ctx)
 
-	res, err := h.storage.Passwords().GetByLogin(ctx, &dto.GetByLoginRequest{
+	res, err := h.storage.Passwords().GetByLogin(ctx, &dto.GetPwdByLoginRequest{
 		Login:  req.GetLogin(),
 		UserID: *userID,
 	})
 	if err != nil && !core.IsNotFound(err) {
-		h.log.Error(fmt.Sprintf("error getting the password for %s from db", req.GetLogin()), err)
-		return nil, handleError(err, fmt.Sprintf("error getting the password for %s from db", req.GetLogin()))
+		msg := fmt.Sprintf("error getting the password for %s from db", req.GetLogin())
+		h.log.Error(msg, err)
+		return nil, handleError(err, msg)
 	}
 
 	if err != nil && core.IsNotFound(err) {
-		_, errCr := h.storage.Passwords().Create(ctx, &dto.CreateRequest{
+		_, errCr := h.storage.Passwords().Create(ctx, &dto.CreatePwdRequest{
 			UserID:   *userID,
 			Login:    req.GetLogin(),
 			Password: req.GetPassword(),
@@ -58,8 +55,9 @@ func (h *PasswordHandler) CreatePassword(ctx context.Context, req *pb.CreatePass
 			Version:  req.GetVersion(),
 		})
 		if errCr != nil {
-			h.log.Error(fmt.Sprintf("error creating the password for login %s", req.Login), err)
-			return nil, handleError(err, fmt.Sprintf("error creating the password for login %s", req.Login))
+			msg := fmt.Sprintf("error creating the password for login %s", req.Login)
+			h.log.Error(msg, err)
+			return nil, handleError(err, msg)
 		}
 
 		return &pb.CreatePasswordResponse{
@@ -71,7 +69,7 @@ func (h *PasswordHandler) CreatePassword(ctx context.Context, req *pb.CreatePass
 		return nil, status.Error(codes.AlreadyExists, newerVersionDetected)
 	}
 
-	_, errCr := h.storage.Passwords().Create(ctx, &dto.CreateRequest{
+	_, errCr := h.storage.Passwords().Create(ctx, &dto.CreatePwdRequest{
 		UserID:   *userID,
 		Login:    req.GetLogin(),
 		Password: req.GetPassword(),
@@ -79,8 +77,9 @@ func (h *PasswordHandler) CreatePassword(ctx context.Context, req *pb.CreatePass
 		Version:  req.GetVersion(),
 	})
 	if errCr != nil {
-		h.log.Error(fmt.Sprintf("error creating the password for login %s", req.Login), err)
-		return nil, handleError(err, fmt.Sprintf("error creating the password for login %s", req.Login))
+		msg := fmt.Sprintf("error creating the password for login %s", req.Login)
+		h.log.Error(msg, err)
+		return nil, handleError(err, msg)
 	}
 
 	return &pb.CreatePasswordResponse{
@@ -89,25 +88,27 @@ func (h *PasswordHandler) CreatePassword(ctx context.Context, req *pb.CreatePass
 }
 
 func (h *PasswordHandler) GetPassword(ctx context.Context, req *pb.GetPasswordRequest) (*pb.GetPasswordResponse, error) {
-	h.log.Info("GetPassword handler")
+	h.log.Debug("GetPassword handler")
 	if req.GetLogin() == "" {
 		return nil, status.Error(codes.InvalidArgument, "invalid argument")
 	}
 
 	userID := utils.GetUserIDFromCTX(ctx)
 
-	res, err := h.storage.Passwords().GetByLogin(ctx, &dto.GetByLoginRequest{
+	res, err := h.storage.Passwords().GetByLogin(ctx, &dto.GetPwdByLoginRequest{
 		Login:  req.GetLogin(),
 		UserID: *userID,
 	})
 	if err != nil {
 		if core.IsNotFound(err) {
-			h.log.Error(fmt.Sprintf("data for login %s not found", req.Login), err)
-			return nil, handleError(err, fmt.Sprintf("data for login %s not found", req.Login))
+			msg := fmt.Sprintf("data for login %s not found", req.Login)
+			h.log.Error(msg, err)
+			return nil, handleError(err, msg)
 		}
 
-		h.log.Error(fmt.Sprintf("failed to obtain latest data for login %s", req.Login), err)
-		return nil, handleError(err, fmt.Sprintf("failed to obtain latest data for login %s", req.Login))
+		msg := fmt.Sprintf("failed to obtain latest data for login %s", req.Login)
+		h.log.Error(msg, err)
+		return nil, handleError(err, msg)
 	}
 
 	return &pb.GetPasswordResponse{
@@ -119,20 +120,21 @@ func (h *PasswordHandler) GetPassword(ctx context.Context, req *pb.GetPasswordRe
 }
 
 func (h *PasswordHandler) DeletePassword(ctx context.Context, req *pb.DeletePasswordRequest) (*pb.DeletePasswordResponse, error) {
-	h.log.Info("DeletePassword")
+	h.log.Debug("DeletePassword handler")
 	if req.GetLogin() == "" {
 		return nil, status.Error(codes.InvalidArgument, "invalid argument")
 	}
 
 	userID := utils.GetUserIDFromCTX(ctx)
 
-	err := h.storage.Passwords().Delete(ctx, &dto.DeletePasswordRequest{
+	err := h.storage.Passwords().Delete(ctx, &dto.DeletePwdRequest{
 		Login:  req.GetLogin(),
 		UserID: *userID,
 	})
 	if err != nil {
-		h.log.Error(fmt.Sprintf("failed to delete data for login %s", req.Login), err)
-		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to delete data for login %s: %w", req.Login, err))
+		msg := fmt.Sprintf("failed to delete data for login %s", req.Login)
+		h.log.Error(msg, err)
+		return nil, status.Error(codes.Internal, msg)
 	}
 
 	return &pb.DeletePasswordResponse{

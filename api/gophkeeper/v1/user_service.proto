@@ -51,11 +51,17 @@ message Password {
 }
 
 message Text {
-
+  string title = 1;
+  string data = 2;
+  string meta = 3;
+  uint32 version = 4;
 }
 
 message Binary {
-
+  string title = 1;
+  string data = 2;
+  string meta = 3;
+  uint32 version = 4;
 }
 
 message Card {

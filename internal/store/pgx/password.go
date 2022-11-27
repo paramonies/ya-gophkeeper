@@ -29,7 +29,7 @@ func NewPasswordRepo(p *pgxpool.Pool, queryTimeout time.Duration) *PasswordRepo 
 	}
 }
 
-func (r *PasswordRepo) Create(ctx context.Context, req *dto.CreateRequest) (*dto.CreateResponse, error) {
+func (r *PasswordRepo) Create(ctx context.Context, req *dto.CreatePwdRequest) (*dto.CreatePwdResponse, error) {
 	query := `
 INSERT INTO passwords
 (
@@ -56,12 +56,12 @@ RETURNING id
 		return nil, err
 	}
 
-	return &dto.CreateResponse{
+	return &dto.CreatePwdResponse{
 		PasswordID: passID,
 	}, nil
 }
 
-func (r *PasswordRepo) GetByLogin(ctx context.Context, req *dto.GetByLoginRequest) (*dto.GetByLoginResponse, error) {
+func (r *PasswordRepo) GetByLogin(ctx context.Context, req *dto.GetPwdByLoginRequest) (*dto.GetPwdByLoginResponse, error) {
 	query := `
 SELECT login, password, meta, version FROM passwords
 WHERE login=$1 AND user_id=$2 AND deleted_at isnull ORDER BY version DESC LIMIT 1
@@ -85,7 +85,7 @@ WHERE login=$1 AND user_id=$2 AND deleted_at isnull ORDER BY version DESC LIMIT 
 		return nil, err
 	}
 
-	return &dto.GetByLoginResponse{
+	return &dto.GetPwdByLoginResponse{
 		ID:       id,
 		UserID:   req.UserID,
 		Login:    req.Login,
@@ -95,7 +95,7 @@ WHERE login=$1 AND user_id=$2 AND deleted_at isnull ORDER BY version DESC LIMIT 
 	}, nil
 }
 
-func (r *PasswordRepo) GetAll(ctx context.Context, req *dto.GetAllRequest) (*dto.GetAllResponse, error) {
+func (r *PasswordRepo) GetAll(ctx context.Context, req *dto.GetPwdAllRequest) (*dto.GetPwdAllResponse, error) {
 	query := `
 SELECT DISTINCT ON (login) login, password, meta, version 
 FROM passwords WHERE user_id = $1 AND deleted_at isnull ORDER BY login, version DESC
@@ -111,9 +111,7 @@ FROM passwords WHERE user_id = $1 AND deleted_at isnull ORDER BY login, version 
 	defer rows.Close()
 
 	pwds := make([]*model.Password, 0)
-	fmt.Println("inside GetAll 2", req.UserID)
 	for rows.Next() {
-		fmt.Println("inside GetAll 3")
 		var (
 			login    string
 			password string
@@ -125,8 +123,6 @@ FROM passwords WHERE user_id = $1 AND deleted_at isnull ORDER BY login, version 
 		if err != nil {
 			return nil, err
 		}
-
-		fmt.Printf("%s %s %s %d \n", login, password, meta, version)
 
 		pwd := &model.Password{
 			Login:    login,
@@ -141,12 +137,12 @@ FROM passwords WHERE user_id = $1 AND deleted_at isnull ORDER BY login, version 
 		return nil, err
 	}
 
-	return &dto.GetAllResponse{
+	return &dto.GetPwdAllResponse{
 		Passwords: pwds,
 	}, nil
 }
 
-func (r *PasswordRepo) Delete(ctx context.Context, req *dto.DeletePasswordRequest) error {
+func (r *PasswordRepo) Delete(ctx context.Context, req *dto.DeletePwdRequest) error {
 	query := `
 UPDATE passwords SET deleted_at = current_timestamp WHERE login = $1 AND user_id = $2
 `

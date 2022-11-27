@@ -5,6 +5,10 @@ import (
 	pb "github.com/paramonies/ya-gophkeeper/pkg/gen/api/gophkeeper/v1"
 )
 
+var (
+	newerVersionDetected = "newer version found in database. please synchronize you app to get the most actual data."
+)
+
 func PasswordModelsToProto(pwds []*model.Password) []*pb.Password {
 	res := make([]*pb.Password, len(pwds))
 
@@ -21,4 +25,34 @@ func PasswordModelsToProto(pwds []*model.Password) []*pb.Password {
 	return res
 }
 
-// todo: make modelsToProto for other entities
+func TextModelsToProto(texts []*model.Text) []*pb.Text {
+	res := make([]*pb.Text, len(texts))
+
+	for _, t := range texts {
+		r := &pb.Text{
+			Title:   t.Title,
+			Data:    t.Data,
+			Meta:    t.Meta,
+			Version: t.Version,
+		}
+
+		res = append(res, r)
+	}
+	return res
+}
+
+func BinaryModelsToProto(binaries []*model.Binary) []*pb.Binary {
+	res := make([]*pb.Binary, len(binaries))
+
+	for _, b := range binaries {
+		b := &pb.Binary{
+			Title:   b.Title,
+			Data:    b.Data,
+			Meta:    b.Meta,
+			Version: b.Version,
+		}
+
+		res = append(res, b)
+	}
+	return res
+}

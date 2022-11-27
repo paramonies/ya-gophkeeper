@@ -9,6 +9,8 @@ import (
 type Connector interface {
 	Users() UserRepo
 	Passwords() PasswordRepo
+	Texts() TextRepo
+	Binaries() BinaryRepo
 }
 
 type UserRepo interface {
@@ -17,8 +19,22 @@ type UserRepo interface {
 }
 
 type PasswordRepo interface {
-	Create(ctx context.Context, req *dto.CreateRequest) (*dto.CreateResponse, error)
-	GetByLogin(ctx context.Context, req *dto.GetByLoginRequest) (*dto.GetByLoginResponse, error)
-	GetAll(ctx context.Context, req *dto.GetAllRequest) (*dto.GetAllResponse, error)
-	Delete(ctx context.Context, req *dto.DeletePasswordRequest) error
+	Create(ctx context.Context, req *dto.CreatePwdRequest) (*dto.CreatePwdResponse, error)
+	GetByLogin(ctx context.Context, req *dto.GetPwdByLoginRequest) (*dto.GetPwdByLoginResponse, error)
+	GetAll(ctx context.Context, req *dto.GetPwdAllRequest) (*dto.GetPwdAllResponse, error)
+	Delete(ctx context.Context, req *dto.DeletePwdRequest) error
+}
+
+type TextRepo interface {
+	Create(ctx context.Context, req *dto.CreateTextRequest) (*dto.CreateTextResponse, error)
+	GetByLogin(ctx context.Context, req *dto.GetTextByTitleRequest) (*dto.GetTextByTitleResponse, error)
+	GetAll(ctx context.Context, req *dto.GetTextAllRequest) (*dto.GetTextAllResponse, error)
+	Delete(ctx context.Context, req *dto.DeleteTextRequest) error
+}
+
+type BinaryRepo interface {
+	Create(ctx context.Context, req *dto.CreateBinaryRequest) (*dto.CreateBinaryResponse, error)
+	GetByLogin(ctx context.Context, req *dto.GetBinaryByTitleRequest) (*dto.GetBinaryByTitleResponse, error)
+	GetAll(ctx context.Context, req *dto.GetBinaryAllRequest) (*dto.GetBinaryAllResponse, error)
+	Delete(ctx context.Context, req *dto.DeleteBinaryRequest) error
 }

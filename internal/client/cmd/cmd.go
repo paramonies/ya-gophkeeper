@@ -16,6 +16,8 @@ var (
 	cfg     *config.Config
 	cliUser gophkeeper.UserServiceClient
 	cliPass gophkeeper.PasswordServiceClient
+	cliText gophkeeper.TextServiceClient
+	cliBin  gophkeeper.BinaryServiceClient
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -31,8 +33,12 @@ var rootCmd = &cobra.Command{
 func Init(l *logger.Logger, cf *config.Config, cliSet *client.ClientSet) error {
 	log = l
 	cfg = cf
+
 	cliUser = cliSet.UserClient
 	cliPass = cliSet.PwdClient
+	cliText = cliSet.TextClient
+	cliBin = cliSet.BinClient
+
 	err := rootCmd.Execute()
 	if err != nil {
 		return err

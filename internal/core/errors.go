@@ -66,7 +66,7 @@ type PasswordNotFoundError struct {
 }
 
 func NewPasswordNotFoundError(login string) error {
-	return &UserNotFoundError{
+	return &PasswordNotFoundError{
 		ResourceNotFoundError{
 			Kind: "password",
 			ID:   login,
@@ -75,6 +75,40 @@ func NewPasswordNotFoundError(login string) error {
 }
 
 func (e *PasswordNotFoundError) Unwrap() error {
+	return &e.ResourceNotFoundError
+}
+
+type TextNotFoundError struct {
+	ResourceNotFoundError
+}
+
+func NewTextNotFoundError(title string) error {
+	return &TextNotFoundError{
+		ResourceNotFoundError{
+			Kind: "text",
+			ID:   title,
+		},
+	}
+}
+
+func (e *TextNotFoundError) Unwrap() error {
+	return &e.ResourceNotFoundError
+}
+
+type BinaryNotFoundError struct {
+	ResourceNotFoundError
+}
+
+func NewBinaryNotFoundError(title string) error {
+	return &BinaryNotFoundError{
+		ResourceNotFoundError{
+			Kind: "binary",
+			ID:   title,
+		},
+	}
+}
+
+func (e *BinaryNotFoundError) Unwrap() error {
 	return &e.ResourceNotFoundError
 }
 

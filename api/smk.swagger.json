@@ -1,12 +1,18 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/gophkeeper/v1/password_service.proto",
+    "title": "api/gophkeeper/v1/binary_service.proto",
     "version": "version not set"
   },
   "tags": [
     {
+      "name": "BinaryService"
+    },
+    {
       "name": "PasswordService"
+    },
+    {
+      "name": "TextService"
     },
     {
       "name": "UserService"
@@ -21,10 +27,33 @@
   "paths": {},
   "definitions": {
     "protoBinary": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "meta": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
     },
     "protoCard": {
       "type": "object"
+    },
+    "protoCreateBinaryResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
     },
     "protoCreatePasswordResponse": {
       "type": "object",
@@ -34,7 +63,31 @@
         }
       }
     },
+    "protoCreateTextResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "protoDeleteBinaryResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
     "protoDeletePasswordResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "protoDeleteTextResponse": {
       "type": "object",
       "properties": {
         "status": {
@@ -71,6 +124,24 @@
         }
       }
     },
+    "protoGetBinaryResponse": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "meta": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
     "protoGetPasswordResponse": {
       "type": "object",
       "properties": {
@@ -78,6 +149,24 @@
           "type": "string"
         },
         "password": {
+          "type": "string"
+        },
+        "meta": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "protoGetTextResponse": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "data": {
           "type": "string"
         },
         "meta": {
@@ -130,7 +219,22 @@
       }
     },
     "protoText": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "meta": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
     }
   }
 }

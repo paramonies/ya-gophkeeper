@@ -2,7 +2,7 @@ package dto
 
 import "github.com/paramonies/ya-gophkeeper/internal/model"
 
-type CreateRequest struct {
+type CreatePwdRequest struct {
 	UserID   string
 	Login    string
 	Password string
@@ -10,16 +10,16 @@ type CreateRequest struct {
 	Version  uint32
 }
 
-type CreateResponse struct {
+type CreatePwdResponse struct {
 	PasswordID string
 }
 
-type GetByLoginRequest struct {
+type GetPwdByLoginRequest struct {
 	Login  string
 	UserID string
 }
 
-type GetByLoginResponse struct {
+type GetPwdByLoginResponse struct {
 	ID       string
 	UserID   string
 	Login    string
@@ -28,14 +28,14 @@ type GetByLoginResponse struct {
 	Version  uint32
 }
 
-type GetAllRequest struct {
+type GetPwdAllRequest struct {
 	UserID string
 }
 
-type GetAllResponse struct {
+type GetPwdAllResponse struct {
 	Passwords []*model.Password
 }
-type DeletePasswordRequest struct {
+type DeletePwdRequest struct {
 	Login  string
 	UserID string
 }

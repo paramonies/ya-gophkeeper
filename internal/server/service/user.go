@@ -92,46 +92,40 @@ func (h *UserHandler) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 }
 
 func (h *UserHandler) GetAllUserDataFromDB(ctx context.Context, req *pb.GetAllUserDataFromDBRequest) (*pb.GetAllUserDataFromDBResponse, error) {
-	h.log.Info("SyncUserData handler")
+	h.log.Debug("SyncUserData handler")
 
 	userID := util.GetUserIDFromCTX(ctx)
-	pwdData, err := h.storage.Passwords().GetAll(ctx, &dto.GetAllRequest{
+
+	pwdData, err := h.storage.Passwords().GetAll(ctx, &dto.GetPwdAllRequest{
 		UserID: *userID,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	pwd := pwdData.Passwords
-	fmt.Println("!!!")
-	for _, p := range pwd {
-		fmt.Printf("%s %s %s %d \n", p.Login, p.Password, p.Meta, p.Version)
+	//pwd := pwdData.Passwords
+	//for _, p := range pwd {
+	//	fmt.Printf("%s %s %s %d \n", p.Login, p.Password, p.Meta, p.Version)
+	//}
+
+	textData, err := h.storage.Texts().GetAll(ctx, &dto.GetTextAllRequest{
+		UserID: *userID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	binaryData, err := h.storage.Binaries().GetAll(ctx, &dto.GetBinaryAllRequest{
+		UserID: *userID,
+	})
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.GetAllUserDataFromDBResponse{
 		Passwords: PasswordModelsToProto(pwdData.Passwords),
-		Texts:     nil,
-		Binaries:  nil,
+		Texts:     TextModelsToProto(textData.Texts),
+		Binaries:  BinaryModelsToProto(binaryData.Binaries),
 		Cards:     nil,
 	}, nil
 }
-
-//func (h *UserHandler) getAllServerDataLastVersion(ctx context.Context, userID string) (*model.ServerData, error) {
-//	var err error
-//	data := new(model.ServerData)
-//	pwdData, err := h.storage.Passwords().GetAll(ctx, &dto.GetAllRequest{
-//		UserID: userID,
-//	})
-//	if err != nil {
-//		return nil, err
-//	}
-//
-//	pwd := pwdData.Passwords
-//	fmt.Println("!!!")
-//	for _, p := range pwd {
-//		fmt.Printf("%s %s %s %d \n", p.Login, p.Password, p.Meta, p.Version)
-//	}
-//
-//	data.Passwords = pwdData.Passwords
-//	return data, nil
-//}

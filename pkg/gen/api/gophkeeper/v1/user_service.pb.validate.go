@@ -927,6 +927,14 @@ func (m *Text) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Title
+
+	// no validation rules for Data
+
+	// no validation rules for Meta
+
+	// no validation rules for Version
+
 	if len(errors) > 0 {
 		return TextMultiError(errors)
 	}
@@ -1024,6 +1032,14 @@ func (m *Binary) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for Title
+
+	// no validation rules for Data
+
+	// no validation rules for Meta
+
+	// no validation rules for Version
 
 	if len(errors) > 0 {
 		return BinaryMultiError(errors)

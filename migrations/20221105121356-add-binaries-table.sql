@@ -3,8 +3,9 @@ create table if not exists binaries
 (
     id              uuid default gen_random_uuid(),
     user_id         uuid not null,
-    binarу_data     text,
-    data_version    integer not null default 0,
+    title           text not null,
+    data            bytea not null,
+    version         integer not null default 0,
     meta            text,
     created_at      timestamp default now(),
     deleted_at      timestamp,

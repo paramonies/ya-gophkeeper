@@ -34,9 +34,13 @@ func RunGRPCServer(addr string, con store.Connector, l *logger.Logger) error {
 
 	userHandler := service.NewUserHandler(con, l)
 	passwordHandler := service.NewPasswordHandler(con, l)
+	textHandler := service.NewTextHandler(con, l)
+	binaryHandler := service.NewBinaryHandler(con, l)
 
 	pb.RegisterUserServiceServer(grpcServer, userHandler)
 	pb.RegisterPasswordServiceServer(grpcServer, passwordHandler)
+	pb.RegisterTextServiceServer(grpcServer, textHandler)
+	pb.RegisterBinaryServiceServer(grpcServer, binaryHandler)
 
 	go func() {
 		listenErr := grpcServer.Serve(listener)

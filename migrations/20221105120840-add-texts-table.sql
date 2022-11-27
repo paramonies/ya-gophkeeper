@@ -3,8 +3,9 @@ create table if not exists texts
 (
     id              uuid default gen_random_uuid(),
     user_id         uuid not null,
-    text_data       text,
-    data_version    integer not null default 0,
+    title           text not null,
+    data            text,
+    version         integer not null default 0,
     meta            text,
     created_at      timestamp default now(),
     deleted_at      timestamp,

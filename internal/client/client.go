@@ -12,6 +12,8 @@ var clientConn *grpc.ClientConn
 type ClientSet struct {
 	UserClient pb.UserServiceClient
 	PwdClient  pb.PasswordServiceClient
+	TextClient pb.TextServiceClient
+	BinClient  pb.BinaryServiceClient
 }
 
 func CreateClientSet(serverPath string) (*ClientSet, error) {
@@ -25,6 +27,8 @@ func CreateClientSet(serverPath string) (*ClientSet, error) {
 	return &ClientSet{
 		UserClient: pb.NewUserServiceClient(conn),
 		PwdClient:  pb.NewPasswordServiceClient(conn),
+		TextClient: pb.NewTextServiceClient(conn),
+		BinClient:  pb.NewBinaryServiceClient(conn),
 	}, nil
 }
 

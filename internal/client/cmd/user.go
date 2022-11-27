@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os/user"
 	"time"
@@ -211,4 +212,22 @@ var syncUserDataCmd = &cobra.Command{
 
 		return
 	},
+}
+
+func getUserInfo() (*user.User, *model.LocalStorage, *string, error) {
+	u, err := user.Current()
+	if err != nil {
+		return nil, nil, nil, fmt.Errorf("failed to get current linux user: %w", err)
+	}
+
+	jwt, ok := storage.Users[u.Username]
+	if !ok {
+		return nil, nil, nil, errors.New("user not authenticated")
+	}
+
+	storage, ok := storage.Objects[u.Username]
+	if !ok {
+		return nil, nil, nil, errors.New("user not found. Please register")
+	}
+	return u, storage, &jwt, nil
 }

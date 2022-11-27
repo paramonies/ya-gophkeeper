@@ -14,10 +14,16 @@ type Password struct {
 }
 
 type Text struct {
+	Title   string `json:"title"`
+	Data    string `json:"data"`
+	Meta    string `json:"meta"`
 	Version uint32 `json:"version"`
 }
 
 type Binary struct {
+	Title   string `json:"title"`
+	Data    string `json:"data"`
+	Meta    string `json:"meta"`
 	Version uint32 `json:"version"`
 }
 
